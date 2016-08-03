@@ -639,7 +639,7 @@ function sendGenericMessage(recipientId) {
 								        "title": "Take me to Nobroker"
 								        }, {
 								        "type": "postback",
-								        "title": "Buy or Rent property.",
+								        "title": "Buy or Rent property",
 										    "payload": "plan"
 								    }]
 								}
