@@ -191,16 +191,6 @@ function processWitRespone(senderID, body) {
           // searchNobroker(place_id, results, user, map, senderID);
           user.location = place_id;
 
-          if(results.hasOwnProperty('intent')){
-            map['intent'] = results.intent[0].value;
-            user.intent = map['intent'];
-          } else if (!user.hasOwnProperty('intent')) {
-            askIntent(senderID);
-            return;
-          }
-
-          echoMessage(senderID, "Just a sec, I’m looking that up...");
-
           if(results.hasOwnProperty('no_of_bedrooms')){
             map['bhk'] = results.no_of_bedrooms[0].value.match(/\d+/)[0];
             user.bhk = map['bhk'];
@@ -224,6 +214,16 @@ function processWitRespone(senderID, body) {
            user.swimmingPool = map['swimmingPool'];
            console.log('Swimming pool required');
           }
+
+          if(results.hasOwnProperty('intent')){
+            map['intent'] = results.intent[0].value;
+            user.intent = map['intent'];
+          } else if (!user.hasOwnProperty('intent')) {
+            askIntent(senderID);
+            return;
+          }
+
+          echoMessage(senderID, "Just a sec, I’m looking that up...");
           
           userMap[senderID] = user;
           
@@ -287,15 +287,6 @@ function processWitRespone(senderID, body) {
 
   } else if (user.hasOwnProperty('location')) {
         console.error('User Loc by session: ' + user.location);
-        if(results.hasOwnProperty('intent')){
-          map['intent'] = results.intent[0].value;
-          user.intent = map['intent'];
-        } else if (!user.hasOwnProperty('intent')) {
-           askIntent(senderID);
-           return;
-        }
-
-        echoMessage(senderID, "Just a sec, I’m looking that up...");
 
         if(results.hasOwnProperty('no_of_bedrooms')){
           map['bhk'] = results.no_of_bedrooms[0].value.match(/\d+/)[0];
@@ -341,6 +332,16 @@ function processWitRespone(senderID, body) {
           console.log('Search query swimmingPool: ' + swimmingPool);
         }
         
+        if(results.hasOwnProperty('intent')){
+          map['intent'] = results.intent[0].value;
+          user.intent = map['intent'];
+        } else if (!user.hasOwnProperty('intent')) {
+           askIntent(senderID);
+           return;
+        }
+
+        echoMessage(senderID, "Just a sec, I’m looking that up...");
+
         var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
         searchURL = searchURL + user.location;
         searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
