@@ -220,6 +220,7 @@ function processWitRespone(senderID, body) {
             user.intent = map['intent'];
           } else if (!user.hasOwnProperty('intent')) {
             askIntent(senderID);
+            userMap[senderID] = user;
             return;
           }
 
@@ -312,6 +313,16 @@ function processWitRespone(senderID, body) {
          console.log('Swimming pool required');
         }
         
+        if(results.hasOwnProperty('intent')){
+          map['intent'] = results.intent[0].value;
+          user.intent = map['intent'];
+        } else if (!user.hasOwnProperty('intent')) {
+           askIntent(senderID);
+           userMap[senderID] = user;
+           return;
+        }
+
+        echoMessage(senderID, "Just a sec, I’m looking that up...");
         console.log("Updating user map with new inputs...");
         userMap[senderID] = user;
         
@@ -331,16 +342,6 @@ function processWitRespone(senderID, body) {
           swimmingPool = user.swimmingPool;
           console.log('Search query swimmingPool: ' + swimmingPool);
         }
-        
-        if(results.hasOwnProperty('intent')){
-          map['intent'] = results.intent[0].value;
-          user.intent = map['intent'];
-        } else if (!user.hasOwnProperty('intent')) {
-           askIntent(senderID);
-           return;
-        }
-
-        echoMessage(senderID, "Just a sec, I’m looking that up...");
 
         var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
         searchURL = searchURL + user.location;
