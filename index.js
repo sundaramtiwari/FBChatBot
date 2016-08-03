@@ -108,28 +108,7 @@ function receivedMessage(event) {
   	}
 
     makeWitCall(messageText, senderID);
-    queryString = encodeURIComponent(messageText);
-    witUrl = 'https://api.wit.ai/message?v=20160721&q=' + queryString;
-    console.log('Wit URL: ' + witUrl);
-
-  	var options = {
-      uri: witUrl,
-      method: 'GET',
-      headers: {
-          'Authorization': 'Bearer IQ7WHYYVOGCDSAWYXIXDBSGDHHDY4QA5',
-        }
-	  }
-
-  	request(options, function(error, response, body) {
-  		if(error) {
-        echoMessage(senderID, "Oops! AI Engine failed to understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-        setTimeout(sendPlansMessage(senderID), 1500);
-      }
-  		else {
-          processWitRespone(senderID, body);
-      }
-        return;
-  	});
+    
   } else if (messageAttachments) {
     echoMessage(senderID, "Message with attachment received");
   }
@@ -161,7 +140,6 @@ function makeWitCall(messageText, senderID) {
 }
 
 function processWitRespone(senderID, body) {
-
   var map = {};
   map['intent'] = 0;
   map['location'] = 0;
