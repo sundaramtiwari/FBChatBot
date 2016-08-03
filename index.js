@@ -630,8 +630,8 @@ function sendGenericMessage(recipientId) {
 								        "title": "Take me to Nobroker"
 								        }, {
 								        "type": "postback",
-								        "title": "Ok, what else?",
-										"payload": "plan"
+								        "title": "Help me rent/buy property.",
+										    "payload": "plan"
 								    }]
 								}
 							}
