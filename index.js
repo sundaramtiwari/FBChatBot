@@ -286,6 +286,8 @@ function processWitRespone(senderID, body) {
         if(results.hasOwnProperty('intent')){
           map['intent'] = results.intent[0].value;
           user.intent = map['intent'];
+        } else if (!user.hasOwnProperty('intent')) {
+           askIntent(senderID);
         }
 
         if(results.hasOwnProperty('no_of_bedrooms')){
