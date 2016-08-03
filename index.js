@@ -187,7 +187,6 @@ function processWitRespone(senderID, body) {
         predictions = googleResponse.predictions;
 
         if (predictions && predictions.length > 0) {
-          echoMessage(senderID, "Just a sec, I’m looking that up...");
           var place_id = predictions[0].place_id;
           // searchNobroker(place_id, results, user, map, senderID);
           user.location = place_id;
@@ -199,6 +198,8 @@ function processWitRespone(senderID, body) {
             askIntent(senderID);
             return;
           }
+
+          echoMessage(senderID, "Just a sec, I’m looking that up...");
 
           if(results.hasOwnProperty('no_of_bedrooms')){
             map['bhk'] = results.no_of_bedrooms[0].value.match(/\d+/)[0];
@@ -286,7 +287,6 @@ function processWitRespone(senderID, body) {
 
   } else if (user.hasOwnProperty('location')) {
         console.error('User Loc by session: ' + user.location);
-        echoMessage(senderID, "Just a sec, I’m looking that up...");
         if(results.hasOwnProperty('intent')){
           map['intent'] = results.intent[0].value;
           user.intent = map['intent'];
@@ -294,6 +294,8 @@ function processWitRespone(senderID, body) {
            askIntent(senderID);
            return;
         }
+
+        echoMessage(senderID, "Just a sec, I’m looking that up...");
 
         if(results.hasOwnProperty('no_of_bedrooms')){
           map['bhk'] = results.no_of_bedrooms[0].value.match(/\d+/)[0];
