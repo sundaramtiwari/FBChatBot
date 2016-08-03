@@ -193,6 +193,7 @@ function processWitRespone(senderID, body) {
             user.intent = map['intent'];
           } else if (!user.hasOwnProperty('intent')) {
             askIntent(senderID);
+            return;
           }
 
           if(results.hasOwnProperty('no_of_bedrooms')){
@@ -288,6 +289,7 @@ function processWitRespone(senderID, body) {
           user.intent = map['intent'];
         } else if (!user.hasOwnProperty('intent')) {
            askIntent(senderID);
+           return;
         }
 
         if(results.hasOwnProperty('no_of_bedrooms')){
@@ -840,7 +842,7 @@ function receivedPostback(event) {
       userMap[senderID] = new User();
     }
     var user = userMap[senderID];
-    user.intent = map['rent'];
+    user.intent = 'rent';
     receivedMessage(event);
   } else if (payload.toString().toLowerCase() === ("buy")) {
     if (!userMap.hasOwnProperty(senderID)) {
@@ -848,7 +850,7 @@ function receivedPostback(event) {
       userMap[senderID] = new User();
     }
     var user = userMap[senderID];
-    user.intent = map['buy'];
+    user.intent = 'buy';
     receivedMessage(event);
   } 
   else {
