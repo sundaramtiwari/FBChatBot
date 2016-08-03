@@ -107,6 +107,7 @@ function receivedMessage(event) {
   		return;
   	}
 
+    makeWitCall(messageText, senderID);
     queryString = encodeURIComponent(messageText);
     witUrl = 'https://api.wit.ai/message?v=20160721&q=' + queryString;
     console.log('Wit URL: ' + witUrl);
@@ -132,6 +133,31 @@ function receivedMessage(event) {
   } else if (messageAttachments) {
     echoMessage(senderID, "Message with attachment received");
   }
+}
+
+function makeWitCall(messageText, senderID) {
+    queryString = encodeURIComponent(messageText);
+    witUrl = 'https://api.wit.ai/message?v=20160721&q=' + queryString;
+    console.log('Wit URL: ' + witUrl);
+
+    var options = {
+      uri: witUrl,
+      method: 'GET',
+      headers: {
+          'Authorization': 'Bearer IQ7WHYYVOGCDSAWYXIXDBSGDHHDY4QA5',
+        }
+    }
+
+    request(options, function(error, response, body) {
+      if(error) {
+        echoMessage(senderID, "Oops! AI Engine failed to understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
+        setTimeout(sendPlansMessage(senderID), 1500);
+      }
+      else {
+          processWitRespone(senderID, body);
+      }
+        return;
+    });
 }
 
 function processWitRespone(senderID, body) {
@@ -282,7 +308,6 @@ function processWitRespone(senderID, body) {
 
   } else if (user.hasOwnProperty('location')) {
         console.error('User Loc by session: ' + user.location);
-      //searchNobroker(user.location, results, user, map);
         echoMessage(senderID, "Just a sec, I’m looking that up...");
         if(results.hasOwnProperty('intent')){
           map['intent'] = results.intent[0].value;
@@ -843,7 +868,7 @@ function receivedPostback(event) {
     }
     var user = userMap[senderID];
     user.intent = 'rent';
-    receivedMessage(event);
+    makeWitCall('rent', senderID)
   } else if (payload.toString().toLowerCase() === ("buy")) {
     if (!userMap.hasOwnProperty(senderID)) {
       console.error('Adding new user to session: ' + senderID);
@@ -851,7 +876,7 @@ function receivedPostback(event) {
     }
     var user = userMap[senderID];
     user.intent = 'buy';
-    receivedMessage(event);
+    makeWitCall('buy', senderID)
   } 
   else {
   	echoMessage(senderID, payload);
