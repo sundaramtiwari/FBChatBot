@@ -108,7 +108,7 @@ function receivedMessage(event) {
   	}
 
     makeWitCall(messageText, senderID);
-    
+
   } else if (messageAttachments) {
     echoMessage(senderID, "Message with attachment received");
   }
@@ -380,7 +380,7 @@ function processWitRespone(senderID, body) {
         });      
   }
     else {
-      echoMessage(senderID, "Please provide a location. Eg: Koramangala, Bangalore. Type 'reset' to reset your session.");
+      echoMessage(senderID, "Sorry, Unable to understand. Our executives will get in touch with you shortly.");
       return;
   }
 }
@@ -635,7 +635,7 @@ function sendGenericMessage(recipientId) {
 								        "title": "Take me to Nobroker"
 								        }, {
 								        "type": "postback",
-								        "title": "Help me rent/buy property.",
+								        "title": "Buy or Rent property.",
 										    "payload": "plan"
 								    }]
 								}
