@@ -149,7 +149,7 @@ function processWitRespone(senderID, body) {
   var user = userMap[senderID];
 
   if (!results) {
-    echoMessage(senderID, "Unable to help with your request. Ask me something else.");
+    echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
   }
 
   if(results.hasOwnProperty('reset')){
@@ -161,7 +161,7 @@ function processWitRespone(senderID, body) {
 
   if(results.hasOwnProperty('location')) {
     map['location'] = results.location[0].value;
-    console.error('User Loc by text: ' + map['location']);
+    console.log('User Loc by text: ' + map['location']);
 
     googleUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCwy2ETEJXPynpNXJggwjzsHxFcG3Il34o&input='
                   + map['location'];
@@ -191,6 +191,8 @@ function processWitRespone(senderID, body) {
           if(results.hasOwnProperty('intent')){
             map['intent'] = results.intent[0].value;
             user.intent = map['intent'];
+          } else if (!user.hasOwnProperty('intent')) {
+            askIntent(senderID);
           }
 
           if(results.hasOwnProperty('no_of_bedrooms')){
@@ -638,6 +640,34 @@ function sendGenericMessage(recipientId) {
 	      });
 }
 
+function askIntent(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+          type: "template",
+          payload: {
+          template_type: "button",
+          text: 'Please select your preference: buy/rent',
+          buttons: [{
+          "type": "postback",
+          "payload": "Buy",
+          "title": "Buy"
+          }, {
+          "type": "postback",
+          "title": "Rent",
+          "payload": "Rent"
+          }]
+          }
+          }
+    }
+  };  
+
+  callSendAPI(messageData);
+}
+
 function echoMessage(recipientId, messageText) {
   var messageData = {
     recipient: {
@@ -802,6 +832,22 @@ function receivedPostback(event) {
   } else if (payload.toString().toLowerCase() === ("assure")) {
   	messageText = "Guaranteed home solutions with a personal assistant.";
   	echoMessage(senderID, messageText);
+  } else if (payload.toString().toLowerCase() === ("rent")) {
+    if (!userMap.hasOwnProperty(senderID)) {
+      console.error('Adding new user to session: ' + senderID);
+      userMap[senderID] = new User();
+    }
+    var user = userMap[senderID];
+    user.intent = map['rent'];
+    receivedMessage(event);
+  } else if (payload.toString().toLowerCase() === ("buy")) {
+    if (!userMap.hasOwnProperty(senderID)) {
+      console.error('Adding new user to session: ' + senderID);
+      userMap[senderID] = new User();
+    }
+    var user = userMap[senderID];
+    user.intent = map['buy'];
+    receivedMessage(event);
   } 
   else {
   	echoMessage(senderID, payload);
