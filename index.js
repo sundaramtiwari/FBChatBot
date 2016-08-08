@@ -271,7 +271,7 @@ function processWitRespone(senderID, body) {
           
           userMap[senderID] = user;
           
-          var bhk, maxrent, swimmingPool, parking, gym, lift, leaseType, furnishing;
+          var bhk, maxrent, parking, leaseType;
 
           if (user.hasOwnProperty('bhk')) {
             bhk = user.bhk;
@@ -289,20 +289,8 @@ function processWitRespone(senderID, body) {
             parking = user.parking;
           }
 
-          if (user.hasOwnProperty('gym')) {
-            gym = user.gym;
-          }
-
-          if (user.hasOwnProperty('lift')) {
-            lift = user.lift;
-          }
-
           if (user.hasOwnProperty('leaseType')) {
             leaseType = user.leaseType;
-          }
-
-          if (user.hasOwnProperty('furnishing')) {
-            furnishing = user.furnishing;
           }
           
           var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
@@ -326,16 +314,16 @@ function processWitRespone(senderID, body) {
             searchURL = searchURL + 'swimmingPool=1&';
           }
 
-          if (gym === 1) {
+          if (user.hasOwnProperty('gym')) {
             searchURL = searchURL + 'gym=1&';
           }
 
-          if (lift === 1) {
+          if (user.hasOwnProperty('lift')) {
             searchURL = searchURL + 'lift=1&';
           }
 
-          if (furnishing === 1) {
-            searchURL = searchURL + 'furnishing=' + furnishing + '&';
+          if (user.hasOwnProperty('furnishing')) {
+            searchURL = searchURL + 'furnishing=' + user.furnishing + '&';
           }
 
           if (parking) {
@@ -460,7 +448,7 @@ function processWitRespone(senderID, body) {
 
         userMap[senderID] = user;
         
-        var bhk, maxrent, swimmingPool, parking, gym, lift, leaseType, furnishing;
+        var bhk, maxrent, swimmingPool, parking, leaseType;
 
         if (user.hasOwnProperty('bhk')) {
           bhk = user.bhk;
@@ -481,20 +469,8 @@ function processWitRespone(senderID, body) {
             parking = user.parking;
         }
 
-        if (user.hasOwnProperty('gym')) {
-          gym = user.gym;
-        }
-
-        if (user.hasOwnProperty('lift')) {
-          lift = user.lift;
-        }
-
         if (user.hasOwnProperty('leaseType')) {
           leaseType = user.leaseType;
-        }
-
-        if (user.hasOwnProperty('furnishing')) {
-          furnishing = user.furnishing;
         }
 
         var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
@@ -515,20 +491,20 @@ function processWitRespone(senderID, body) {
           searchURL = searchURL + 'rent=' + minrent.trim() + ',' + maxrent.trim() + '&'; 
         }
 
-        if (swimmingPool === 1) {
+        if (user.hasOwnProperty('swimmingPool')) {
           searchURL = searchURL + 'swimmingPool=1&';
         }
 
-        if (gym === 1) {
+        if (user.hasOwnProperty('gym')) {
           searchURL = searchURL + 'gym=1&';
         }
 
-        if (lift === 1) {
+        if (user.hasOwnProperty('lift')) {
           searchURL = searchURL + 'lift=1&';
         }
 
-        if (furnishing === 1) {
-          searchURL = searchURL + 'furnishing=' + furnishing + '&';
+        if (user.hasOwnProperty('furnishing')) {
+          searchURL = searchURL + 'furnishing=' + user.furnishing + '&';
         }
 
         if (parking) {
