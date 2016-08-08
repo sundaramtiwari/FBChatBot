@@ -215,6 +215,49 @@ function processWitRespone(senderID, body) {
            console.log('Swimming pool required');
           }
 
+          if(results.hasOwnProperty('gym')){
+           map['gym'] = 1;
+           user.gym = map['gym'];
+           console.log('Gym required');
+          }
+
+          if(results.hasOwnProperty('lift')){
+           map['lift'] = 1;
+           user.lift = map['lift'];
+           console.log('lift required');
+          }
+
+          if(results.hasOwnProperty('parking')){
+            map['parking'] = results.parking[0].value;
+            if (map['parking'].toLowerCase().indexOf("car") > -1 {
+              map['parking'] = 'car';
+            }
+            user.parking = map['parking'];
+           console.log('parking required');
+          }
+
+          if(results.hasOwnProperty('leaseType')){
+            map['leaseType'] = results.leaseType[0].value;
+            if (map['leaseType'].toLowerCase().indexOf("family") > -1 {
+              map['leaseType'] = 'family';
+            }
+            user.leaseType = map['leaseType'];
+           console.log('leaseType required');
+          }
+
+          if(results.hasOwnProperty('furnishing')){
+            map['furnishing'] = results.furnishing[0].value;
+            if (map['furnishing'].toLowerCase().indexOf("un") > -1 {
+              map['furnishing'] = 'NOT_FURNISHED';
+            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1 {
+              map['furnishing'] = 'SEMI_FURNISHED';
+            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1 {
+              map['furnishing'] = 'FULLY_FURNISHED';
+            }
+            user.leaseType = map['furnishing'];
+           console.log('furnishing required');
+          }
+
           if(results.hasOwnProperty('intent')){
             map['intent'] = results.intent[0].value;
             user.intent = map['intent'];
@@ -228,18 +271,38 @@ function processWitRespone(senderID, body) {
           
           userMap[senderID] = user;
           
-          var bhk, maxrent, swimmingPool;
+          var bhk, maxrent, swimmingPool, parking, gym, lift, leaseType, furnishing;
 
           if (user.hasOwnProperty('bhk')) {
             bhk = user.bhk;
           }
 
           if (user.hasOwnProperty('maxrent')) {
-            var maxrent = user.maxrent;
+            maxrent = user.maxrent;
           }
 
           if (user.hasOwnProperty('swimmingPool')) {
-            var swimmingPool = user.swimmingPool;
+            swimmingPool = user.swimmingPool;
+          }
+
+          if (user.hasOwnProperty('parking')) {
+            parking = user.parking;
+          }
+
+          if (user.hasOwnProperty('gym')) {
+            gym = user.gym;
+          }
+
+          if (user.hasOwnProperty('lift')) {
+            lift = user.lift;
+          }
+
+          if (user.hasOwnProperty('leaseType')) {
+            leaseType = user.leaseType;
+          }
+
+          if (user.hasOwnProperty('furnishing')) {
+            furnishing = user.furnishing;
           }
           
           var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
@@ -261,6 +324,34 @@ function processWitRespone(senderID, body) {
 
           if (swimmingPool === 1) {
             searchURL = searchURL + 'swimmingPool=1&';
+          }
+
+          if (gym === 1) {
+            searchURL = searchURL + 'gym=1&';
+          }
+
+          if (lift === 1) {
+            searchURL = searchURL + 'lift=1&';
+          }
+
+          if (furnishing === 1) {
+            searchURL = searchURL + 'furnishing=' + furnishing + '&';
+          }
+
+          if (parking) {
+            if (parking.toString().toLowerCase() === ("car")) {
+              searchURL = searchURL + 'parking=FOUR_WHEELER&');
+            } else {
+              searchURL = searchURL + 'parking=TWO_WHEELER&');
+            }
+          }
+
+          if (leaseType) {
+            if (leaseType.toString().toLowerCase() === ("family")) {
+              searchURL = searchURL + 'leaseType=FAMILY&');
+            } else {
+              searchURL = searchURL + 'parking=BACHELOR&');
+            }
           }
 
           console.log("NoBroker Search URL: " + searchURL);
@@ -313,6 +404,49 @@ function processWitRespone(senderID, body) {
          console.log('Swimming pool required');
         }
         
+        if(results.hasOwnProperty('gym')){
+           map['gym'] = 1;
+           user.gym = map['gym'];
+           console.log('Gym required');
+          }
+
+          if(results.hasOwnProperty('lift')){
+           map['lift'] = 1;
+           user.lift = map['lift'];
+           console.log('lift required');
+          }
+
+          if(results.hasOwnProperty('parking')){
+            map['parking'] = results.parking[0].value;
+            if (map['parking'].toLowerCase().indexOf("car") > -1 {
+              map['parking'] = 'car';
+            }
+            user.parking = map['parking'];
+           console.log('parking required');
+          }
+
+          if(results.hasOwnProperty('leaseType')){
+            map['leaseType'] = results.leaseType[0].value;
+            if (map['leaseType'].toLowerCase().indexOf("family") > -1 {
+              map['leaseType'] = 'family';
+            }
+            user.leaseType = map['leaseType'];
+           console.log('leaseType required');
+          }
+
+          if(results.hasOwnProperty('furnishing')){
+            map['furnishing'] = results.furnishing[0].value;
+            if (map['furnishing'].toLowerCase().indexOf("un") > -1 {
+              map['furnishing'] = 'NOT_FURNISHED';
+            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1 {
+              map['furnishing'] = 'SEMI_FURNISHED';
+            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1 {
+              map['furnishing'] = 'FULLY_FURNISHED';
+            }
+            user.leaseType = map['furnishing'];
+           console.log('furnishing required');
+          }
+
         if(results.hasOwnProperty('intent')){
           map['intent'] = results.intent[0].value;
           user.intent = map['intent'];
@@ -323,10 +457,10 @@ function processWitRespone(senderID, body) {
         }
 
         echoMessage(senderID, "Just a sec, I’m looking that up...");
-        console.log("Updating user map with new inputs...");
+
         userMap[senderID] = user;
         
-        var bhk, maxrent, swimmingPool;
+        var bhk, maxrent, swimmingPool, parking, gym, lift, leaseType, furnishing;
 
         if (user.hasOwnProperty('bhk')) {
           bhk = user.bhk;
@@ -341,6 +475,26 @@ function processWitRespone(senderID, body) {
         if (user.hasOwnProperty('swimmingPool')) {
           swimmingPool = user.swimmingPool;
           console.log('Search query swimmingPool: ' + swimmingPool);
+        }
+
+        if (user.hasOwnProperty('parking')) {
+            parking = user.parking;
+        }
+
+        if (user.hasOwnProperty('gym')) {
+          gym = user.gym;
+        }
+
+        if (user.hasOwnProperty('lift')) {
+          lift = user.lift;
+        }
+
+        if (user.hasOwnProperty('leaseType')) {
+          leaseType = user.leaseType;
+        }
+
+        if (user.hasOwnProperty('furnishing')) {
+          furnishing = user.furnishing;
         }
 
         var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
@@ -363,6 +517,34 @@ function processWitRespone(senderID, body) {
 
         if (swimmingPool === 1) {
           searchURL = searchURL + 'swimmingPool=1&';
+        }
+
+        if (gym === 1) {
+          searchURL = searchURL + 'gym=1&';
+        }
+
+        if (lift === 1) {
+          searchURL = searchURL + 'lift=1&';
+        }
+
+        if (furnishing === 1) {
+          searchURL = searchURL + 'furnishing=' + furnishing + '&';
+        }
+
+        if (parking) {
+          if (parking.toString().toLowerCase() === ("car")) {
+            searchURL = searchURL + 'parking=FOUR_WHEELER&');
+          } else {
+            searchURL = searchURL + 'parking=TWO_WHEELER&');
+          }
+        }
+
+        if (leaseType) {
+          if (leaseType.toString().toLowerCase() === ("family")) {
+            searchURL = searchURL + 'leaseType=FAMILY&');
+          } else {
+            searchURL = searchURL + 'parking=BACHELOR&');
+          }
         }
 
         console.log("NoBroker Search URL: " + searchURL);
