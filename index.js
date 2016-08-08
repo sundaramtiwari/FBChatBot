@@ -229,7 +229,7 @@ function processWitRespone(senderID, body) {
 
           if(results.hasOwnProperty('parking')){
             map['parking'] = results.parking[0].value;
-            if (map['parking'].toLowerCase().indexOf("car") > -1 {
+            if (map['parking'].toLowerCase().indexOf("car") > -1) {
               map['parking'] = 'car';
             }
             user.parking = map['parking'];
@@ -238,7 +238,7 @@ function processWitRespone(senderID, body) {
 
           if(results.hasOwnProperty('leaseType')){
             map['leaseType'] = results.leaseType[0].value;
-            if (map['leaseType'].toLowerCase().indexOf("family") > -1 {
+            if (map['leaseType'].toLowerCase().indexOf("family") > -1) {
               map['leaseType'] = 'family';
             }
             user.leaseType = map['leaseType'];
@@ -247,11 +247,11 @@ function processWitRespone(senderID, body) {
 
           if(results.hasOwnProperty('furnishing')){
             map['furnishing'] = results.furnishing[0].value;
-            if (map['furnishing'].toLowerCase().indexOf("un") > -1 {
+            if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
               map['furnishing'] = 'NOT_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1 {
+            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
               map['furnishing'] = 'SEMI_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1 {
+            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
               map['furnishing'] = 'FULLY_FURNISHED';
             }
             user.leaseType = map['furnishing'];
@@ -339,18 +339,18 @@ function processWitRespone(senderID, body) {
           }
 
           if (parking) {
-            if (parking.toString().toLowerCase() === ("car")) {
-              searchURL = searchURL + 'parking=FOUR_WHEELER&');
+            if (parking.toString().toLowerCase() === "car") {
+              searchURL = searchURL + 'parking=FOUR_WHEELER&';
             } else {
               searchURL = searchURL + 'parking=TWO_WHEELER&');
             }
           }
 
           if (leaseType) {
-            if (leaseType.toString().toLowerCase() === ("family")) {
-              searchURL = searchURL + 'leaseType=FAMILY&');
+            if (leaseType.toString().toLowerCase() === "family") {
+              searchURL = searchURL + 'leaseType=FAMILY&';
             } else {
-              searchURL = searchURL + 'parking=BACHELOR&');
+              searchURL = searchURL + 'parking=BACHELOR&';
             }
           }
 
@@ -418,7 +418,7 @@ function processWitRespone(senderID, body) {
 
           if(results.hasOwnProperty('parking')){
             map['parking'] = results.parking[0].value;
-            if (map['parking'].toLowerCase().indexOf("car") > -1 {
+            if (map['parking'].toLowerCase().indexOf("car") > -1) {
               map['parking'] = 'car';
             }
             user.parking = map['parking'];
@@ -427,7 +427,7 @@ function processWitRespone(senderID, body) {
 
           if(results.hasOwnProperty('leaseType')){
             map['leaseType'] = results.leaseType[0].value;
-            if (map['leaseType'].toLowerCase().indexOf("family") > -1 {
+            if (map['leaseType'].toLowerCase().indexOf("family") > -1) {
               map['leaseType'] = 'family';
             }
             user.leaseType = map['leaseType'];
@@ -436,11 +436,11 @@ function processWitRespone(senderID, body) {
 
           if(results.hasOwnProperty('furnishing')){
             map['furnishing'] = results.furnishing[0].value;
-            if (map['furnishing'].toLowerCase().indexOf("un") > -1 {
+            if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
               map['furnishing'] = 'NOT_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1 {
+            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
               map['furnishing'] = 'SEMI_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1 {
+            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
               map['furnishing'] = 'FULLY_FURNISHED';
             }
             user.leaseType = map['furnishing'];
@@ -532,10 +532,10 @@ function processWitRespone(senderID, body) {
         }
 
         if (parking) {
-          if (parking.toString().toLowerCase() === ("car")) {
-            searchURL = searchURL + 'parking=FOUR_WHEELER&');
+          if (parking.toString().toLowerCase() === "car") {
+            searchURL = searchURL + 'parking=FOUR_WHEELER&';
           } else {
-            searchURL = searchURL + 'parking=TWO_WHEELER&');
+            searchURL = searchURL + 'parking=TWO_WHEELER&';
           }
         }
 
