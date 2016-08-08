@@ -541,9 +541,9 @@ function processWitRespone(senderID, body) {
 
         if (leaseType) {
           if (leaseType.toString().toLowerCase() === ("family")) {
-            searchURL = searchURL + 'leaseType=FAMILY&');
+            searchURL = searchURL + 'leaseType=FAMILY&';
           } else {
-            searchURL = searchURL + 'parking=BACHELOR&');
+            searchURL = searchURL + 'parking=BACHELOR&';
           }
         }
 
