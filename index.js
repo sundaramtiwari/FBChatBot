@@ -814,7 +814,7 @@ function sendGenericMessage(recipientId) {
 							    type: "template",
 							    payload: {
 								    template_type: "button",
-								    text: 'Hi ' + fbResponse.first_name+ ' ' + fbResponse.last_name +'.\nI am an AI-based assistant for Nobroker.\n\n',
+								    text: 'Hi ' + fbResponse.first_name+ ' ' + fbResponse.last_name +'.\nI am an AI-based assistant for Nobroker. Ask me things like: \'2 bhk flats in koramangala bangalore\'\n\n',
 								    buttons: [{
 								        "type": "web_url",
 								        "url": "http://www.nobroker.in/tenant/plans",
