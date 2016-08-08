@@ -254,7 +254,7 @@ function processWitRespone(senderID, body) {
             } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
               map['furnishing'] = 'FULLY_FURNISHED';
             }
-            user.leaseType = map['furnishing'];
+            user.furnishing = map['furnishing'];
            console.log('furnishing required');
           }
 
@@ -342,7 +342,7 @@ function processWitRespone(senderID, body) {
             if (parking.toString().toLowerCase() === "car") {
               searchURL = searchURL + 'parking=FOUR_WHEELER&';
             } else {
-              searchURL = searchURL + 'parking=TWO_WHEELER&');
+              searchURL = searchURL + 'parking=TWO_WHEELER&';
             }
           }
 
@@ -443,7 +443,7 @@ function processWitRespone(senderID, body) {
             } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
               map['furnishing'] = 'FULLY_FURNISHED';
             }
-            user.leaseType = map['furnishing'];
+            user.furnishing = map['furnishing'];
            console.log('furnishing required');
           }
 
