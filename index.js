@@ -682,10 +682,10 @@ function sendPropertyResponse(jsonResponse, senderID) {
     }
   }
 
-  if (propertyArray.length > 2) {
+  if (propertyArray.length > 3) {
     sendPropertiesMessage(senderID, propertyArray);
   } else {
-    echoMessage(senderID, 'Sorry! Unable to process your request right now.. will be back shortly.');
+    echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
 }
 
