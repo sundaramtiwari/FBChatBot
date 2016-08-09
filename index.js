@@ -308,7 +308,7 @@ function processWitRespone(senderID, body) {
             searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
           }
           searchURL = searchURL + place_id;
-          searchURL = searchURL + '?sharedAccomodation=0&pageNo=1&';
+          searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
 
           if (bhk) {
             searchURL = searchURL + 'type=BHK' +bhk.trim() + '&'; 
@@ -493,7 +493,7 @@ function processWitRespone(senderID, body) {
           searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
         }
         searchURL = searchURL + user.location;
-        searchURL = searchURL + '?sharedAccomodation=0&pageNo=1&';
+        searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
 
         console.log('Adding filters to search URL...');
         if (bhk) {
