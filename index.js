@@ -303,9 +303,9 @@ function processWitRespone(senderID, body) {
           
           var searchURL;
           if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
-            searchURL = 'http://beta.nobroker.in/api/v1/property/sale/filter/region/';
+            searchURL = 'http://www.nobroker.in/api/v1/property/sale/filter/region/';
           } else {
-            searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
+            searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
           }
           searchURL = searchURL + place_id;
           searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
@@ -488,9 +488,9 @@ function processWitRespone(senderID, body) {
 
         var searchURL;
         if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
-          searchURL = 'http://beta.nobroker.in/api/v1/property/sale/filter/region/';
+          searchURL = 'http://www.nobroker.in/api/v1/property/sale/filter/region/';
         } else {
-          searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
+          searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
         }
         searchURL = searchURL + user.location;
         searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
@@ -613,7 +613,7 @@ function searchNobroker(place_id, results, user, map, senderID) {
           var swimmingPool = user.swimmingPool;
         }
         
-        var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
+        var searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
         searchURL = searchURL + place_id;
         searchURL = searchURL + '?sharedAccomodation=0&pageNo=1&';
 
