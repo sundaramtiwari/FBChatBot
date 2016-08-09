@@ -279,17 +279,14 @@ function processWitRespone(senderID, body) {
 
           if (user.hasOwnProperty('bhk')) {
             bhk = user.bhk;
-            echoMessage(senderID, "Filtering results with BHK: " + bhk);
           }
 
           if (user.hasOwnProperty('maxrent')) {
             maxrent = user.maxrent;
-            echoMessage(senderID, "Filtering results with Max Rent: " + maxrent);
           }
 
           if (user.hasOwnProperty('swimmingPool')) {
             swimmingPool = user.swimmingPool;
-            echoMessage(senderID, "Filtering results with swimmingPool");
           }
 
           if (user.hasOwnProperty('parking')) {
@@ -336,20 +333,16 @@ function processWitRespone(senderID, body) {
           if (parking) {
             if (parking.toString().toLowerCase() === "car") {
               searchURL = searchURL + 'parking=FOUR_WHEELER&';
-              echoMessage(senderID, "Filtering results with Car Parking");
             } else {
               searchURL = searchURL + 'parking=TWO_WHEELER&';
-              echoMessage(senderID, "Filtering results with Parking");
             }
           }
 
           if (leaseType) {
             if (leaseType.toString().toLowerCase() === "family") {
               searchURL = searchURL + 'leaseType=FAMILY&';
-              echoMessage(senderID, "Filtering results for Family tenants");
             } else {
               searchURL = searchURL + 'parking=BACHELOR&';
-              echoMessage(senderID, "Filtering results for Bachelor tenants");
             }
           }
 
@@ -464,19 +457,16 @@ function processWitRespone(senderID, body) {
         if (user.hasOwnProperty('bhk')) {
           bhk = user.bhk;
           console.log('Search query bhk: ' + bhk);
-          echoMessage(senderID, "Filtering results for BHK: " + bhk);
         }
 
         if (user.hasOwnProperty('maxrent')) {
           var maxrent = user.maxrent;
           console.log('Search query maxrent: ' + maxrent);
-          echoMessage(senderID, "Filtering results for maxrent: " + maxrent);
         }
 
         if (user.hasOwnProperty('swimmingPool')) {
           swimmingPool = user.swimmingPool;
           console.log('Search query swimmingPool: ' + swimmingPool);
-          echoMessage(senderID, "Filtering results with swimmingPool.");
         }
 
         if (user.hasOwnProperty('parking')) {
@@ -519,26 +509,21 @@ function processWitRespone(senderID, body) {
 
         if (user.hasOwnProperty('furnishing')) {
           searchURL = searchURL + 'furnishing=' + user.furnishing + '&';
-          echoMessage(senderID, "Filtering results with furnishing: " + user.furnishing);
         }
 
         if (parking) {
           if (parking.toString().toLowerCase() === "car") {
             searchURL = searchURL + 'parking=FOUR_WHEELER&';
-            echoMessage(senderID, "Filtering results with Car Parking.");
           } else {
             searchURL = searchURL + 'parking=TWO_WHEELER&';
-            echoMessage(senderID, "Filtering results with Parking.");
           }
         }
 
         if (leaseType) {
           if (leaseType.toString().toLowerCase() === ("family")) {
             searchURL = searchURL + 'leaseType=FAMILY&';
-            echoMessage(senderID, "Filtering results for family tenants.");
           } else {
             searchURL = searchURL + 'parking=BACHELOR&';
-            echoMessage(senderID, "Filtering results for bachelor tenants.");
           }
         }
 
