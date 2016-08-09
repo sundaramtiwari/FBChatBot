@@ -189,8 +189,10 @@ function processWitRespone(senderID, body) {
         if (predictions && predictions.length > 0) {
           var place_id = predictions[0].place_id;
           // searchNobroker(place_id, results, user, map, senderID);
+          var existing_intent = user.intent;
           userMap[senderID] = new User();
           user = userMap[senderID];
+          user.intent = existing_intent;
           console.log("Session reset for userId: " + senderID);
 
           user.location = place_id;
@@ -804,7 +806,7 @@ function sendGenericMessage(recipientId) {
 							    type: "template",
 							    payload: {
 								    template_type: "button",
-								    text: 'Hi ' + fbResponse.first_name+ ' ' + fbResponse.last_name +'.\nI am an AI-based assistant for Nobroker. Ask me things like: \'2 bhk flats in koramangala bangalore\'\n\n',
+								    text: 'Dear ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \'2 bhk flats in koramangala bangalore\'\n\n',
 								    buttons: [{
 								        "type": "web_url",
 								        "url": "http://www.nobroker.in/tenant/plans",
