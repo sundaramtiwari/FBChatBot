@@ -74,8 +74,8 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-  console.log("Received message for user %d and page %d at %d", 
-    senderID, recipientID, timeOfMessage);
+  // console.log("Received message for user %d and page %d at %d", 
+  //  senderID, recipientID, timeOfMessage);
 
   if (Object.keys(userMap).length > 100) {
     userMap.splice(-1,1);
@@ -987,7 +987,7 @@ function receivedPostback(event) {
 
   // The 'payload' param is a developer-defined field which is set in a postback button for Structured Messages. 
   var payload = event.postback.payload;
-  console.log("Received postback for user %d and page %d with payload '%s' at %d", senderID, recipientID, payload, timeOfPostback);
+  // console.log("Received postback for user %d and page %d with payload '%s' at %d", senderID, recipientID, payload, timeOfPostback);
 
   // When a postback is called, we'll send a message back to the sender to let them know it was successful
   if (payload.toString().toLowerCase() === ("plan")) {
