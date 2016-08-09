@@ -192,7 +192,9 @@ function processWitRespone(senderID, body) {
           var existing_intent = user.intent;
           userMap[senderID] = new User();
           user = userMap[senderID];
-          user.intent = existing_intent;
+          if (existing_intent) {
+            user.intent = existing_intent;
+          }
           console.log("Session reset for userId: " + senderID);
 
           user.location = place_id;
