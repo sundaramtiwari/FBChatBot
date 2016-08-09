@@ -297,7 +297,12 @@ function processWitRespone(senderID, body) {
             leaseType = user.leaseType;
           }
           
-          var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
+          var searchURL;
+          if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
+            searchURL = 'http://beta.nobroker.in/api/v1/property/sale/filter/region/';
+          } else {
+            searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
+          }
           searchURL = searchURL + place_id;
           searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
 
@@ -477,7 +482,12 @@ function processWitRespone(senderID, body) {
           leaseType = user.leaseType;
         }
 
-        var searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
+        var searchURL;
+        if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
+          searchURL = 'http://beta.nobroker.in/api/v1/property/sale/filter/region/';
+        } else {
+          searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
+        }
         searchURL = searchURL + user.location;
         searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
 
