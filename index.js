@@ -195,13 +195,13 @@ function processWitRespone(senderID, body) {
           console.log("Session reset for userId: " + senderID);
           user.location = place_id;
 
-          searchNobroker(map, userMap, results, user);
+          searchNobroker(map, userMap, results, user, senderID);
         }
       }
     });
 
   } else if (user.hasOwnProperty('location')) {
-    searchNobroker(map, userMap, results, user);
+    searchNobroker(map, userMap, results, user, senderID);
   }
     else {
       echoMessage(senderID, "Sorry, Unable to understand. Our executives will get in touch with you shortly.");
@@ -209,7 +209,7 @@ function processWitRespone(senderID, body) {
   }
 }
 
-function  searchNobroker(map, userMap, results, user) {
+function  searchNobroker(map, userMap, results, user, senderID) {
           if(results.hasOwnProperty('intent')){
             user.intent = results.intent[0].value;
           } else if (!user.hasOwnProperty('intent')) {
