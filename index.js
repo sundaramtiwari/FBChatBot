@@ -196,6 +196,9 @@ function processWitRespone(senderID, body) {
           user.location = place_id;
 
           searchNobroker(map, userMap, results, user);
+        }
+      }
+    });
 
   } else if (user.hasOwnProperty('location')) {
     searchNobroker(map, userMap, results, user);
@@ -203,7 +206,6 @@ function processWitRespone(senderID, body) {
     else {
       echoMessage(senderID, "Sorry, Unable to understand. Our executives will get in touch with you shortly.");
       return;
-  }
   }
 }
 
