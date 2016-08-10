@@ -273,7 +273,7 @@ function  searchNobroker(map, userMap, results, user, senderID) {
           } else {
             searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
           }
-          searchURL = searchURL + place_id;
+          searchURL = searchURL + user.location.trim();
           searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
 
           if (user.bhk) {
