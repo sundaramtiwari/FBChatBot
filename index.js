@@ -410,11 +410,11 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             buttons: [{
               type: "web_url",
               url: propertyArray[0].detailUrl,
-              title: "Contact"
+              title: "View Property"
             }, {
               type: "postback",
               title: "Read Here",
-              payload: propertyArray[0].description,
+              payload: propertyArray[0].description.substring(0, 999),
             }]
           },
           {
@@ -425,11 +425,11 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             buttons: [{
               type: "web_url",
               url: propertyArray[1].detailUrl,
-              title: "Contact"
+              title: "View Property"
             }, {
               type: "postback",
               title: "Read Here",
-              payload: propertyArray[1].description,
+              payload: propertyArray[1].description.substring(0, 999),
             }]
           },
           {
@@ -440,11 +440,11 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             buttons: [{
               type: "web_url",
               url: propertyArray[2].detailUrl,
-              title: "Contact"
+              title: "View Property"
             }, {
               type: "postback",
               title: "Read Here",
-              payload: propertyArray[2].description,
+              payload: propertyArray[2].description.substring(0, 999),
             }]
           },
           {
@@ -455,11 +455,11 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             buttons: [{
               type: "web_url",
               url: propertyArray[3].detailUrl,
-              title: "Contact"
+              title: "View Property"
             }, {
               type: "postback",
               title: "Read Here",
-              payload: propertyArray[3].description,
+              payload: propertyArray[3].description.substring(0, 999),
             }]
           }]
         }
