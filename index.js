@@ -19,10 +19,10 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/webhook/', function (request, response) {
-	if (request.query['hub.verify_token'] === 'Nobroker_Labs') {
-		response.send(request.query['hub.challenge'])
-	}
-	response.send('Error, wrong token')
+  if (request.query['hub.verify_token'] === 'Nobroker_Labs') {
+    response.send(request.query['hub.challenge'])
+  }
+  response.send('Error, wrong token')
 })
 
 // API endpoint
@@ -82,30 +82,28 @@ function receivedMessage(event) {
   }
 
   if (!userMap.hasOwnProperty(senderID)) {
-    console.error('Adding new user to session: ' + senderID);
+    console.log('Adding new user to session: ' + senderID);
     userMap[senderID] = new User();
   } else {
-    console.error('User already in session: ' + userMap[senderID]);
+    console.log('User already in session: ' + userMap[senderID]);
   }
 
   var messageId = message.mid;
-
-  // You may get a text or attachment but not both
   var messageText = message.text;
   var messageAttachments = message.attachments;
 
   if (messageText) {
 
-  	if (messageText.toLowerCase().indexOf("hi") > -1 || messageText.toLowerCase().indexOf("hello") > -1
+    if (messageText.toLowerCase().indexOf("hi") > -1 || messageText.toLowerCase().indexOf("hello") > -1
         || messageText.toLowerCase().indexOf("hey") > -1 || messageText.toLowerCase().indexOf("up") > -1) {
-  		sendGenericMessage(senderID);
-  		return;
-  	}
+      sendGenericMessage(senderID);
+      return;
+    }
 
-  	if (messageText.indexOf("plan") > -1) {
-  		sendPlansMessage(senderID);
-  		return;
-  	}
+    if (messageText.indexOf("plan") > -1) {
+      sendPlansMessage(senderID);
+      return;
+    }
 
     makeWitCall(messageText, senderID);
 
@@ -158,8 +156,7 @@ function processWitRespone(senderID, body) {
 
   if(results.hasOwnProperty('reset')){
     userMap[senderID] = new User();
-    resetText = "Session reset for userId: " + senderID;
-    echoMessage(senderID, resetText);
+    echoMessage(senderID, "Session reset for userId: " + senderID);
     return;
   }
 
@@ -196,44 +193,48 @@ function processWitRespone(senderID, body) {
             user.intent = existing_intent;
           }
           console.log("Session reset for userId: " + senderID);
-
           user.location = place_id;
 
-          if(results.hasOwnProperty('no_of_bedrooms')){
-            map['bhk'] = results.no_of_bedrooms[0].value.match(/\d+/)[0];
-            user.bhk = map['bhk'];
-            console.log('bhk: ' + map['bhk']);
+          searchNobroker(map, userMap, results, user);
+
+  } else if (user.hasOwnProperty('location')) {
+    searchNobroker(map, userMap, results, user);
+  }
+    else {
+      echoMessage(senderID, "Sorry, Unable to understand. Our executives will get in touch with you shortly.");
+      return;
+  }
+  }
+}
+
+function  searchNobroker(map, userMap, results, user) {
+          if(results.hasOwnProperty('intent')){
+            user.intent = results.intent[0].value;
+          } else if (!user.hasOwnProperty('intent')) {
+            askIntent(senderID);
+            userMap[senderID] = user;
+            return;
           }
 
-          if(results.hasOwnProperty('maxrent')){
-           map['maxrent'] = results.maxrent[0].value;
-           user.maxrent = map['maxrent'];
-           console.log('maxrent: ' + map['maxrent'].value);
-          }
+          echoMessage(senderID, "Just a sec, I’m looking that up...");
 
-          if(results.hasOwnProperty('minrent')){
-            map['minrent'] = results.minrent[0].value;
-            user.minrent = map['minrent'];
-            console.log('minrent: ' + map['minrent'].value);
-          }
+          if(results.hasOwnProperty('no_of_bedrooms'))
+            user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
 
-          if(results.hasOwnProperty('swimmingpool')){
-           map['swimmingPool'] = 1;
-           user.swimmingPool = map['swimmingPool'];
-           console.log('Swimming pool required');
-          }
+          if(results.hasOwnProperty('maxrent'))
+           user.maxrent = results.maxrent[0].value;
 
-          if(results.hasOwnProperty('gym')){
-           map['gym'] = 1;
-           user.gym = map['gym'];
-           console.log('Gym required');
-          }
+          if(results.hasOwnProperty('minrent'))
+            user.minrent = results.minrent[0].value;
 
-          if(results.hasOwnProperty('lift')){
-           map['lift'] = 1;
-           user.lift = map['lift'];
-           console.log('lift required');
-          }
+          if(results.hasOwnProperty('swimmingpool'))
+           user.swimmingPool = 1;
+
+          if(results.hasOwnProperty('gym'))
+           user.gym = 1;
+
+          if(results.hasOwnProperty('lift'))
+           user.lift = 1;
 
           if(results.hasOwnProperty('parking')){
             map['parking'] = results.parking[0].value;
@@ -241,7 +242,6 @@ function processWitRespone(senderID, body) {
               map['parking'] = 'car';
             }
             user.parking = map['parking'];
-           console.log('parking required');
           }
 
           if(results.hasOwnProperty('leaseType')){
@@ -250,56 +250,20 @@ function processWitRespone(senderID, body) {
               map['leaseType'] = 'family';
             }
             user.leaseType = map['leaseType'];
-           console.log('leaseType required');
           }
 
           if(results.hasOwnProperty('furnishing')){
             map['furnishing'] = results.furnishing[0].value;
             if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
-              map['furnishing'] = 'NOT_FURNISHED';
+              user.furnishing = 'NOT_FURNISHED';
             } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
-              map['furnishing'] = 'SEMI_FURNISHED';
+              user.furnishing = 'SEMI_FURNISHED';
             } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
-              map['furnishing'] = 'FULLY_FURNISHED';
+              user.furnishing = 'FULLY_FURNISHED';
             }
-            user.furnishing = map['furnishing'];
-           console.log('furnishing required');
           }
-
-          if(results.hasOwnProperty('intent')){
-            map['intent'] = results.intent[0].value;
-            user.intent = map['intent'];
-          } else if (!user.hasOwnProperty('intent')) {
-            askIntent(senderID);
-            userMap[senderID] = user;
-            return;
-          }
-
-          echoMessage(senderID, "Just a sec, I’m looking that up...");
           
           userMap[senderID] = user;
-          
-          var bhk, maxrent, parking, leaseType;
-
-          if (user.hasOwnProperty('bhk')) {
-            bhk = user.bhk;
-          }
-
-          if (user.hasOwnProperty('maxrent')) {
-            maxrent = user.maxrent;
-          }
-
-          if (user.hasOwnProperty('swimmingPool')) {
-            swimmingPool = user.swimmingPool;
-          }
-
-          if (user.hasOwnProperty('parking')) {
-            parking = user.parking;
-          }
-
-          if (user.hasOwnProperty('leaseType')) {
-            leaseType = user.leaseType;
-          }
           
           var searchURL;
           if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
@@ -310,20 +274,19 @@ function processWitRespone(senderID, body) {
           searchURL = searchURL + place_id;
           searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
 
-          if (bhk) {
-            searchURL = searchURL + 'type=BHK' +bhk.trim() + '&'; 
+          if (user.bhk) {
+            searchURL = searchURL + 'type=BHK' +user.bhk.trim() + '&'; 
           }
            
-          if (maxrent) {
+          if (user.maxrent) {
             if (user.hasOwnProperty('minrent')) {
-              minrent = user.minrent.toString();
+              searchURL = searchURL + 'rent=' + user.minrent.trim() + ',' + user.maxrent.trim() + '&';
             } else {
-              minrent = '0';
+              searchURL = searchURL + 'rent=0,' + user.maxrent.trim() + '&';
             }
-            searchURL = searchURL + 'rent=' + minrent + ',' + maxrent.trim() + '&'; 
           }
 
-          if (swimmingPool === 1) {
+          if (user.hasOwnProperty('swimmingPool')) {
             searchURL = searchURL + 'swimmingPool=1&';
           }
 
@@ -339,16 +302,16 @@ function processWitRespone(senderID, body) {
             searchURL = searchURL + 'furnishing=' + user.furnishing + '&';
           }
 
-          if (parking) {
-            if (parking.toString().toLowerCase() === "car") {
+          if (user.parking) {
+            if (user.parking.toString().toLowerCase() === "car") {
               searchURL = searchURL + 'parking=FOUR_WHEELER&';
             } else {
               searchURL = searchURL + 'parking=TWO_WHEELER&';
             }
           }
 
-          if (leaseType) {
-            if (leaseType.toString().toLowerCase() === "family") {
+          if (user.leaseType) {
+            if (user.leaseType.toString().toLowerCase() === "family") {
               searchURL = searchURL + 'leaseType=FAMILY&';
             } else {
               searchURL = searchURL + 'parking=BACHELOR&';
@@ -372,290 +335,6 @@ function processWitRespone(senderID, body) {
               return;
             }
           });
-        } else {
-          echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore."); 
-        }
-      }
-    });
-
-  } else if (user.hasOwnProperty('location')) {
-        console.error('User Loc by session: ' + user.location);
-
-        if(results.hasOwnProperty('no_of_bedrooms')){
-          map['bhk'] = results.no_of_bedrooms[0].value.match(/\d+/)[0];
-          user.bhk = map['bhk'];
-          console.log('bhk: ' + map['bhk']);
-        }
-
-        if(results.hasOwnProperty('maxrent')){
-         map['maxrent'] = results.maxrent[0].value;
-         user.maxrent = map['maxrent'];
-         console.log('maxrent: ' + map['maxrent'].value);
-        }
-
-        if(results.hasOwnProperty('minrent')){
-          map['minrent'] = results.minrent[0].value;
-          user.minrent = map['minrent'];
-          console.log('minrent: ' + map['minrent'].value);
-        }
-
-        if(results.hasOwnProperty('swimmingpool')){
-         map['swimmingPool'] = 1;
-         user.swimmingPool = map['swimmingPool'];
-         console.log('Swimming pool required');
-        }
-        
-        if(results.hasOwnProperty('gym')){
-           map['gym'] = 1;
-           user.gym = map['gym'];
-           console.log('Gym required');
-          }
-
-          if(results.hasOwnProperty('lift')){
-           map['lift'] = 1;
-           user.lift = map['lift'];
-           console.log('lift required');
-          }
-
-          if(results.hasOwnProperty('parking')){
-            map['parking'] = results.parking[0].value;
-            if (map['parking'].toLowerCase().indexOf("car") > -1) {
-              map['parking'] = 'car';
-            }
-            user.parking = map['parking'];
-           console.log('parking required');
-          }
-
-          if(results.hasOwnProperty('leaseType')){
-            map['leaseType'] = results.leaseType[0].value;
-            if (map['leaseType'].toLowerCase().indexOf("family") > -1) {
-              map['leaseType'] = 'family';
-            }
-            user.leaseType = map['leaseType'];
-           console.log('leaseType required');
-          }
-
-          if(results.hasOwnProperty('furnishing')){
-            map['furnishing'] = results.furnishing[0].value;
-            if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
-              map['furnishing'] = 'NOT_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
-              map['furnishing'] = 'SEMI_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
-              map['furnishing'] = 'FULLY_FURNISHED';
-            }
-            user.furnishing = map['furnishing'];
-           console.log('furnishing required');
-          }
-
-        if(results.hasOwnProperty('intent')){
-          map['intent'] = results.intent[0].value;
-          user.intent = map['intent'];
-        } else if (!user.hasOwnProperty('intent')) {
-           askIntent(senderID);
-           userMap[senderID] = user;
-           return;
-        }
-
-        echoMessage(senderID, "Just a sec, I’m looking that up...");
-
-        userMap[senderID] = user;
-        
-        var bhk, maxrent, swimmingPool, parking, leaseType;
-
-        if (user.hasOwnProperty('bhk')) {
-          bhk = user.bhk;
-          console.log('Search query bhk: ' + bhk);
-        }
-
-        if (user.hasOwnProperty('maxrent')) {
-          var maxrent = user.maxrent;
-          console.log('Search query maxrent: ' + maxrent);
-        }
-
-        if (user.hasOwnProperty('swimmingPool')) {
-          swimmingPool = user.swimmingPool;
-          console.log('Search query swimmingPool: ' + swimmingPool);
-        }
-
-        if (user.hasOwnProperty('parking')) {
-            parking = user.parking;
-        }
-
-        if (user.hasOwnProperty('leaseType')) {
-          leaseType = user.leaseType;
-        }
-
-        var searchURL;
-        if (user.intent) {
-          if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
-            searchURL = 'http://beta.nobroker.in/api/v1/property/sale/filter/region/';
-          } else {
-            searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
-          }
-        } else {
-          searchURL = 'http://beta.nobroker.in/api/v1/property/filter/region/';
-        }
-        searchURL = searchURL + user.location;
-        searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
-
-        console.log('Adding filters to search URL...');
-        if (bhk) {
-          searchURL = searchURL + 'type=BHK' + bhk.trim() + '&'; 
-        }
-         
-        if (maxrent) {
-          if (user.hasOwnProperty('minrent')) {
-            minrent = user.minrent;
-          } else {
-            minrent = '0';
-          }
-          searchURL = searchURL + 'rent=' + minrent.trim() + ',' + maxrent.trim() + '&'; 
-        }
-
-        if (user.hasOwnProperty('swimmingPool')) {
-          searchURL = searchURL + 'swimmingPool=1&';
-        }
-
-        if (user.hasOwnProperty('gym')) {
-          searchURL = searchURL + 'gym=1&';
-        }
-
-        if (user.hasOwnProperty('lift')) {
-          searchURL = searchURL + 'lift=1&';
-        }
-
-        if (user.hasOwnProperty('furnishing')) {
-          searchURL = searchURL + 'furnishing=' + user.furnishing + '&';
-        }
-
-        if (parking) {
-          if (parking.toString().toLowerCase() === "car") {
-            searchURL = searchURL + 'parking=FOUR_WHEELER&';
-          } else {
-            searchURL = searchURL + 'parking=TWO_WHEELER&';
-          }
-        }
-
-        if (leaseType) {
-          if (leaseType.toString().toLowerCase() === ("family")) {
-            searchURL = searchURL + 'leaseType=FAMILY&';
-          } else {
-            searchURL = searchURL + 'parking=BACHELOR&';
-          }
-        }
-
-        console.log("NoBroker Search URL: " + searchURL);
-        
-        options = {
-          uri: searchURL,
-          method: 'GET',
-        }
-
-        request(options, function(error, response, body) {
-          if(error) {
-            console.error(error);
-            echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-            setTimeout(sendPlansMessage(senderID), 1500);
-          } else {
-            sendPropertyResponse(JSON.parse(body), senderID);
-            return;
-          }
-        });      
-  }
-    else {
-      echoMessage(senderID, "Sorry, Unable to understand. Our executives will get in touch with you shortly.");
-      return;
-  }
-}
-
-function searchNobroker(place_id, results, user, map, senderID) {
-        user.location = place_id;
-
-        if(results.hasOwnProperty('intent')){
-          map['intent'] = results.intent[0].value;
-          user.intent = map['intent'];
-        }
-
-        if(results.hasOwnProperty('no_of_bedrooms')){
-          map['bhk'] = results.no_of_bedrooms[0].value.match(/\d+/)[0];
-          user.bhk = map['bhk'];
-          console.log('bhk: ' + map['bhk']);
-        }
-
-        if(results.hasOwnProperty('maxrent')){
-         map['maxrent'] = results.maxrent[0].value;
-         user.maxrent = map['maxrent'];
-         console.log('maxrent: ' + map['maxrent'].value);
-        }
-
-        if(results.hasOwnProperty('minrent')){
-          map['minrent'] = results.minrent[0].value;
-          user.minrent = map['minrent'];
-          console.log('minrent: ' + map['minrent'].value);
-        }
-
-        if(results.hasOwnProperty('swimmingpool')){
-         map['swimmingPool'] = 1;
-         user.swimmingPool = map['swimmingPool'];
-         console.log('Swimming pool required');
-        }
-        
-        userMap[senderID] = user;
-        
-        var bhk, maxrent, swimmingPool;
-
-        if (user.hasOwnProperty('bhk')) {
-          bhk = user.bhk;
-        }
-
-        if (user.hasOwnProperty('maxrent')) {
-          var maxrent = user.maxrent;
-        }
-
-        if (user.hasOwnProperty('swimmingPool')) {
-          var swimmingPool = user.swimmingPool;
-        }
-        
-        var searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
-        searchURL = searchURL + place_id;
-        searchURL = searchURL + '?sharedAccomodation=0&pageNo=1&';
-
-        if (bhk) {
-          searchURL = searchURL + 'type=BHK' +bhk.trim() + '&'; 
-        }
-         
-        if (maxrent) {
-          if (user.hasOwnProperty('minrent')) {
-            minrent = user.minrent.toString();
-          } else {
-            minrent = '0';
-          }
-          searchURL = searchURL + 'rent=' + minrent + ',' + maxrent.trim() + '&'; 
-        }
-
-        if (swimmingPool === 1) {
-          searchURL = searchURL + 'swimmingPool=1&';
-        }
-
-        console.log("NoBroker Search URL: " + searchURL);
-        
-        options = {
-          uri: searchURL,
-          method: 'GET',
-        }
-
-        request(options, function(error, response, body) {
-          if(error) {
-            console.error(error);
-            echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-            setTimeout(sendPlansMessage(senderID), 1500);
-          } else {
-            sendPropertyResponse(JSON.parse(body), senderID);
-            return;
-          }
-        });
-      
 }
 
 var propertyArray = [];
@@ -790,45 +469,45 @@ function sendPropertiesMessage(recipientId, propertyArray) {
 }
 
 function sendGenericMessage(recipientId) {
-	var fbResponse;
+  var fbResponse;
 
-	request({
-	          url: 'https://graph.facebook.com/v2.6/'+ recipientId +'?fields=',
-	          qs: {access_token: PAGE_ACCESS_TOKEN},
-	          method: 'GET'
-	      }, function(error, response, body) {
-	          if (error) {
-	              console.log('Error sending message: ', error);
-	          } else if (response.body.error) {
-	              console.log('Error: ', response.body.error);
-	          }else{
-	          	  fbResponse = JSON.parse(body);
-	          	  var messageData = {
-	    				recipient: {
-	      					id: recipientId
-	    				},
-	    				message:{
-						    attachment: {
-							    type: "template",
-							    payload: {
-								    template_type: "button",
-								    text: 'Dear ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \'2 bhk flats in koramangala bangalore\'\n\n',
-								    buttons: [{
-								        "type": "web_url",
-								        "url": "http://www.nobroker.in/tenant/plans",
-								        "title": "Take me to Nobroker"
-								        }, {
-								        "type": "postback",
-								        "title": "Buy or Rent property",
-										    "payload": "plan"
-								    }]
-								}
-							}
-						}
-				  }
-				callSendAPI(messageData);
-	          }
-	      });
+  request({
+            url: 'https://graph.facebook.com/v2.6/'+ recipientId +'?fields=',
+            qs: {access_token: PAGE_ACCESS_TOKEN},
+            method: 'GET'
+        }, function(error, response, body) {
+            if (error) {
+                console.log('Error sending message: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            }else{
+                fbResponse = JSON.parse(body);
+                var messageData = {
+              recipient: {
+                  id: recipientId
+              },
+              message:{
+                attachment: {
+                  type: "template",
+                  payload: {
+                    template_type: "button",
+                    text: 'Dear ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \'2 bhk flats in koramangala bangalore\'\n\n',
+                    buttons: [{
+                        "type": "web_url",
+                        "url": "http://www.nobroker.in/tenant/plans",
+                        "title": "Take me to Nobroker"
+                        }, {
+                        "type": "postback",
+                        "title": "Buy or Rent property",
+                        "payload": "plan"
+                    }]
+                }
+              }
+            }
+          }
+        callSendAPI(messageData);
+            }
+        });
 }
 
 function askIntent(recipientId) {
@@ -892,53 +571,6 @@ function callSendAPI(messageData) {
       console.error(error);
     }
   });  
-}
-
-function sendOldGenericMessage(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "generic",
-          elements: [{
-            title: "rift",
-            subtitle: "Next-generation virtual reality",
-            item_url: "https://www.oculus.com/en-us/rift/",               
-            image_url: "http://messengerdemo.parseapp.com/img/rift.png",
-            buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "Open Web URL"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for first bubble",
-            }],
-          }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",               
-            image_url: "http://messengerdemo.parseapp.com/img/touch.png",
-            buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/touch/",
-              title: "Open Web URL"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for second bubble",
-            }]
-          }]
-        }
-      }
-    }
-  };  
-
-  callSendAPI(messageData);
 }
 
 function sendPlansMessage(recipientId) {
@@ -1013,16 +645,16 @@ function receivedPostback(event) {
 
   // When a postback is called, we'll send a message back to the sender to let them know it was successful
   if (payload.toString().toLowerCase() === ("plan")) {
-	sendPlansMessage(senderID);
+  sendPlansMessage(senderID);
   } else if (payload.toString().toLowerCase() === ("freedom")) {
-  	messageText = "Set yourself free and get more owner contacts.";
-  	echoMessage(senderID, messageText);
+    messageText = "Set yourself free and get more owner contacts.";
+    echoMessage(senderID, messageText);
   } else if (payload.toString().toLowerCase() === ("relax")) {
-  	messageText = "Sit back and relax, get a personal assistant to find a house.";
-  	echoMessage(senderID, messageText);
+    messageText = "Sit back and relax, get a personal assistant to find a house.";
+    echoMessage(senderID, messageText);
   } else if (payload.toString().toLowerCase() === ("assure")) {
-  	messageText = "Guaranteed home solutions with a personal assistant.";
-  	echoMessage(senderID, messageText);
+    messageText = "Guaranteed home solutions with a personal assistant.";
+    echoMessage(senderID, messageText);
   } else if (payload.toString().toLowerCase() === ("rent")) {
     if (!userMap.hasOwnProperty(senderID)) {
       console.error('Adding new user to session: ' + senderID);
@@ -1041,7 +673,7 @@ function receivedPostback(event) {
     makeWitCall('buy', senderID)
   } 
   else {
-  	echoMessage(senderID, payload);
+    echoMessage(senderID, payload);
   }
 }
 
