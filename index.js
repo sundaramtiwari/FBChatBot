@@ -172,7 +172,10 @@ function processWitRespone(senderID, body) {
     console.log('GoogleUrl: ' + googleUrl);
     var options = {
       uri: googleUrl,
-      method: 'GET'
+      method: 'GET',
+      headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'
+        }
     }
 
     request(options, function(error, response, body) {
@@ -188,7 +191,6 @@ function processWitRespone(senderID, body) {
         if (predictions && predictions.length > 0) {
           var place_id = predictions[0].place_id;
           console.log("Google PlaceId: " + place_id);
-          // searchNobroker(place_id, results, user, map, senderID);
           var existing_intent = user.intent;
           userMap[senderID] = new User();
           user = userMap[senderID];
