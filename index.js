@@ -181,10 +181,15 @@ function processWitRespone(senderID, body) {
       }
       else {
         var googleResponse = JSON.parse(body);
-        predictions = googleResponse.predictions;
+        var predictions = googleResponse.predictions;
 
         if (predictions && predictions.length > 0) {
-          var place_id = predictions[0].place_id;
+          // var place_id = predictions[0].place_id;
+          var place_id;
+          for(var _index = 0; _index < predictions.length; _index++) {
+            place_id = predictions[_index].place_id;
+            break;
+          }
           console.log("Google PlaceId: " + place_id);
           // searchNobroker(place_id, results, user, map, senderID);
           var existing_intent = user.intent;
