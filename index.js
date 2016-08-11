@@ -164,8 +164,10 @@ function processWitRespone(senderID, body) {
     map['location'] = results.location[0].value;
     console.log('User Loc by text: ' + map['location']);
 
+    googleQueryString = encodeURIComponent(map['location']);
+
     googleUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCwy2ETEJXPynpNXJggwjzsHxFcG3Il34o&input='
-                  + map['location'];
+                  + googleQueryString;
 
     console.log('GoogleUrl: ' + googleUrl);
     var options = {
@@ -184,12 +186,7 @@ function processWitRespone(senderID, body) {
         var predictions = googleResponse.predictions;
 
         if (predictions && predictions.length > 0) {
-          // var place_id = predictions[0].place_id;
-          var place_id;
-          for(var _index = 0; _index < predictions.length; _index++) {
-            place_id = predictions[_index].place_id;
-            console.log(place_id);
-          }
+          var place_id = predictions[0].place_id;
           console.log("Google PlaceId: " + place_id);
           // searchNobroker(place_id, results, user, map, senderID);
           var existing_intent = user.intent;
