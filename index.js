@@ -189,6 +189,9 @@ function processWitRespone(senderID, body) {
         var predictions = googleResponse.predictions;
 
         if (predictions && predictions.length > 0) {
+          for (var i=0; i < predictions.length; i++) {
+            console.log(predictions[i]);
+          }
           var place_id = predictions[0].place_id;
           console.log("Google PlaceId: " + place_id);
           var existing_intent = user.intent;
