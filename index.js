@@ -172,10 +172,7 @@ function processWitRespone(senderID, body) {
     console.log('GoogleUrl: ' + googleUrl);
     var options = {
       uri: googleUrl,
-      method: 'GET',
-      headers: {
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'
-        }
+      method: 'GET'
     }
 
     request(options, function(error, response, body) {
@@ -189,9 +186,7 @@ function processWitRespone(senderID, body) {
         var predictions = googleResponse.predictions;
 
         if (predictions && predictions.length > 0) {
-          for (var i=0; i < predictions.length; i++) {
-            console.log(predictions[i]);
-          }
+          console.log("Predictions Count: " + predictions.length);
           var place_id = predictions[0].place_id;
           console.log("Google PlaceId: " + place_id);
           var existing_intent = user.intent;
