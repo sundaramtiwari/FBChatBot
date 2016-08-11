@@ -185,6 +185,7 @@ function processWitRespone(senderID, body) {
 
         if (predictions && predictions.length > 0) {
           var place_id = predictions[0].place_id;
+          console.log("Google PlaceId: " + place_id);
           // searchNobroker(place_id, results, user, map, senderID);
           var existing_intent = user.intent;
           userMap[senderID] = new User();
@@ -354,7 +355,7 @@ function sendPropertyResponse(jsonResponse, senderID) {
   }
 
   if (data.length === 0) {
-    echoMessage(senderID, "Oops! No matching properties found! \nTry our premium plans customized for your specific needs:");
+    echoMessage(senderID, "Oops! No matching properties found! \n Type \'reset\' to reset your filters.");
     setTimeout(sendPlansMessage(senderID), 1500);
     return 0;
   }
