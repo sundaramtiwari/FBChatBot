@@ -188,7 +188,7 @@ function processWitRespone(senderID, body) {
           var place_id;
           for(var _index = 0; _index < predictions.length; _index++) {
             place_id = predictions[_index].place_id;
-            break;
+            console.log(place_id);
           }
           console.log("Google PlaceId: " + place_id);
           // searchNobroker(place_id, results, user, map, senderID);
