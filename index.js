@@ -462,7 +462,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           template_type: "generic",
           elements: [{
             title: propertyArray[0].bhk + " BHK in " + propertyArray[0].locality,
-            // subtitle: propertyArray[0].title + ". \nRent: " + propertyArray[0].rent + ". \nDeposit: " + propertyArray[0].deposit,
+            subtitle: "Rent: " + propertyArray[0].rent + ".",
             // item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
             buttons: [{
@@ -473,7 +473,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality,
-            // subtitle: propertyArray[1].title + ". Rent: " + propertyArray[1].rent + ". \nDeposit: " + propertyArray[1].deposit,
+            subtitle: "Rent: " + propertyArray[1].rent + ".",
             // item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
             buttons: [{
@@ -484,7 +484,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality,
-            // subtitle: "Rent: " + propertyArray[2].rent,
+            subtitle: "Rent: " + propertyArray[2].rent + ".",
             // item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
             buttons: [{
@@ -495,7 +495,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality,
-            // subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
+            subtitle: "Rent: " + propertyArray[3].rent + ".",
             // item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
             buttons: [{
