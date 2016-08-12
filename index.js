@@ -360,7 +360,7 @@ function  searchNobroker(map, userMap, results, user, senderID) {
               echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
               setTimeout(sendPlansMessage(senderID), 1500);
             } else {
-              sendPropertyResponse(JSON.parse(body), senderID);
+              sendPropertyResponse(JSON.parse(body), senderID, user);
               return;
             }
           });
@@ -371,7 +371,7 @@ var propertyArray = [];
 function Property() {
 };
 
-function sendPropertyResponse(jsonResponse, senderID) {
+function sendPropertyResponse(jsonResponse, senderID, user) {
   var count = 0;
   var data = jsonResponse.data;
 
@@ -387,11 +387,13 @@ function sendPropertyResponse(jsonResponse, senderID) {
   }
 
   propertyArray = [];
-  for (var i=0; count<4; i++) {
-    if (i > 50) {
+  userPropertyArray = [];
+
+  for (var i=0; count < 9; i++) {
+    if (i > 100) {
       break;
     }
-    if (data[i]) {
+    if (data[i] && count < 4) {
         var prop = new Property();
         prop.title = data[i].title;
         prop.description = data[i].description;
@@ -409,13 +411,45 @@ function sendPropertyResponse(jsonResponse, senderID) {
         prop.detailUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
         count++;
         propertyArray.push(prop);
+    } else if (data[i] && count >= 4) {
+        var prop = new Property();
+        prop.title = data[i].title;
+        prop.description = data[i].description;
+        prop.rent = data[i].rent;
+        prop.deposit = data[i].deposit;
+        var photos = data[i].photos;
+        if (photos.length > 0) {
+          imageStr = photos[0].imagesMap.original;
+          img = imageStr.split('_')[0] + '/';
+          prop.image = 'http://d3snwcirvb4r88.cloudfront.net/images/' + img + imageStr;
+        } else {
+          continue;
+        }
+        prop.shortUrl = data[i].shortUrl;
+        prop.detailUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
+        count++;
+        userPropertyArray.push(prop);
     }
+  }
+
+  if (userPropertyArray.length > 3) {
+    user.userPropertyArray = userPropertyArray;
+    userMap[senderID] = user;
+    setTimeout(showMoreButton(senderID, 4000);
+//  client.hmset(senderID, JSON.stringify(user));
+//  client.expire(senderID, 900);
   }
 
   if (propertyArray.length > 3) {
     sendPropertiesMessage(senderID, propertyArray);
-    setTimeout(echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.'), 3000);
-    setTimeout(echoMessage(senderID, 'By typing: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\''), 4000);
+    if (!user.filterSent) {
+      echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.');
+      echoMessage(senderID, 'By typing: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\'');
+      user.filterSent = true;
+      userMap[senderID] = user;
+//  client.hmset(senderID, JSON.stringify(user));
+//  client.expire(senderID, 900);
+    }
   } else {
     echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
@@ -490,6 +524,29 @@ function sendPropertiesMessage(recipientId, propertyArray) {
               title: "Read Here",
               payload: propertyArray[3].description.substring(0, 999),
             }]
+          }]
+        }
+      }
+    }
+  };  
+
+  callSendAPI(messageData);
+}
+
+function showMoreButton(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+          type: "template",
+          payload: {
+          template_type: "button",
+          buttons: [{
+          "type": "postback",
+          "payload": "showmore",
+          "title": "Show more Properties.."
           }]
         }
       }
@@ -721,9 +778,15 @@ function receivedPostback(event) {
 */
     user.intent = 'buy';
     makeWitCall('buy', senderID)
-  } 
-  else {
-    echoMessage(senderID, payload);
+  } else if (payload.toString().toLowerCase() === ("showmore")) {
+      var user = userMap[senderID];
+      if (user.hasOwnProperty('userPropertyArray')) {
+        sendPropertiesMessage(senderID, user.userPropertyArray);
+      } else {
+        echoMessage(senderID, "Please visit www.nobroker.in for more similar properties.");
+      }
+  } else {
+    echoMessage(senderID, "Sorry, didnt understand.");
   }
 }
 
