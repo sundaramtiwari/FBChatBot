@@ -433,10 +433,9 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   }
 
   if (userPropertyArray.length > 3) {
-    echoMessage(senderID, "userPropertyArrayLength: " + userPropertyArray.length);
     user.userPropertyArray = userPropertyArray;
     userMap[senderID] = user;
-    setTimeout(showMoreButton(senderID, 4000));
+    setTimeout(showMoreButton(senderID), 3000);
 //  client.hmset(senderID, JSON.stringify(user));
 //  client.expire(senderID, 900);
   }
@@ -543,13 +542,13 @@ function showMoreButton(recipientId) {
       attachment: {
           type: "template",
           payload: {
-          template_type: "button",
-          buttons: [{
-          "type": "postback",
-          "payload": "showmore",
-          "title": "Show more Properties.."
-          }]
-        }
+            template_type: "button",
+            buttons: [{
+            "type": "postback",
+            "payload": "showmore",
+            "title": "Show more Properties.."
+            }]
+          }
       }
     }
   };  
