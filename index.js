@@ -438,14 +438,6 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
     }
   }
 
-  if (userPropertyArray.length > 3) {
-    user.userPropertyArray = userPropertyArray;
-    userMap[senderID] = user;
-    setTimeout(showMoreButton(senderID), 5000);
-//  client.hmset(senderID, JSON.stringify(user));
-//  client.expire(senderID, 900);
-  }
-
   if (propertyArray.length > 3) {
       if (!user.filterSent) {
         echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.');
@@ -455,7 +447,16 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   //  client.hmset(senderID, JSON.stringify(user));
   //  client.expire(senderID, 900);
       }
-      sendPropertiesMessage(senderID, propertyArray);
+      // sendPropertiesMessage(senderID, propertyArray);
+      sendPropertiesMessage(senderID, propertyArray, function(userPropertyArray, senderID) {
+        if (userPropertyArray && userPropertyArray.length > 3) {
+            user.userPropertyArray = userPropertyArray;
+            userMap[senderID] = user;
+            showMoreButton(senderID);
+        //  client.hmset(senderID, JSON.stringify(user));
+        //  client.expire(senderID, 900);
+        }
+      }
   } else {
       echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
@@ -473,7 +474,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           template_type: "generic",
           elements: [{
             title: "Recommended Property",
-            subtitle: propertyArray[0].title + ". Rent: " + propertyArray[0].rent,
+            subtitle: propertyArray[0].title + ". \nRent: " + propertyArray[0].rent + ". \nDeposit: " + propertyArray[0].deposit,
             item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
             buttons: [{
@@ -488,7 +489,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: "Recommended Property",
-            subtitle: propertyArray[1].title + ". Rent: " + propertyArray[1].rent,
+            subtitle: propertyArray[1].title + ". Rent: " + propertyArray[1].rent + ". \nDeposit: " + propertyArray[1].deposit,
             item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
             buttons: [{
@@ -503,7 +504,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: "Recommended Property",
-            subtitle: propertyArray[2].title + ". Rent: " + propertyArray[2].rent,
+            subtitle: propertyArray[2].title + ". Rent: " + propertyArray[2].rent + ". \nDeposit: " + propertyArray[2].deposit,
             item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
             buttons: [{
@@ -518,7 +519,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: "Recommended Property",
-            subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent,
+            subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
             item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
             buttons: [{
