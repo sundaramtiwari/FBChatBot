@@ -465,44 +465,44 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             subtitle: "Rent: " + propertyArray[0].rent + ".",
             item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
-            buttons: [{
+            /*buttons: [{
               type: "web_url",
               url: propertyArray[0].shortUrl,
               title: "View Property"
-            }]
+            }]*/
           },
           {
             title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[1].rent + ".",
             item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
-            buttons: [{
+            /*buttons: [{
               type: "web_url",
               url: propertyArray[1].shortUrl,
               title: "View Property"
-            }]
+            }]*/
           },
           {
             title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[2].rent + ".",
             item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
-            buttons: [{
+            /*buttons: [{
               type: "web_url",
               url: propertyArray[2].shortUrl,
               title: "View Property"
-            }]
+            }]*/
           },
           {
             title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[3].rent + ".",
             item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
-            buttons: [{
+            /*buttons: [{
               type: "web_url",
               url: propertyArray[3].shortUrl,
               title: "View Property"
-            }]
+            }]*/
           },
           {
             title: 'Team Nobroker',
