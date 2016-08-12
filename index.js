@@ -173,6 +173,7 @@ function processWitRespone(senderID, body) {
     return;
   }
 
+  user.asked = 'false';
   if(results.hasOwnProperty('location')) {
     map['location'] = results.location[0].value;
     console.log('User Loc by text: ' + map['location']);
@@ -233,7 +234,7 @@ function processWitRespone(senderID, body) {
       sendGenericMessage(senderID);
       return;
   } else {
-      echoMessage(senderID, "Sorry, Unable to . Our executives will get in touch with you shortly.");
+      echoMessage(senderID, "Please type the location you are looking for rent/buy property");
       return;
   }
 }
@@ -251,14 +252,22 @@ function  searchNobroker(map, userMap, results, user, senderID) {
 
   echoMessage(senderID, "Just a sec, I’m looking that up...");
 
-  if(results.hasOwnProperty('no_of_bedrooms'))
+  if(results.hasOwnProperty('no_of_bedrooms')) {
     user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
+  } else if (!(user.asked && user.bhkAsked)) {
+    setTimeOut(echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"), 4000);
+    user.bhkAsked = 'true';
+  }
 
-  if(results.hasOwnProperty('maxrent'))
-    user.maxrent = results.maxrent[0].value;
+  if(results.hasOwnProperty('maxrent')) {
+    user.maxrent = parseInt(results.maxrent[0].value) * 1.2;
+  } else if (!(user.asked && user.rentAsked)) {
+     setTimeOut(echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"), 4000);
+     user.rentAsked = 'true';
+  }
 
   if(results.hasOwnProperty('minrent'))
-    user.minrent = results.minrent[0].value;
+    user.minrent = parseInt(results.minrent[0].value) * 0.8;
 
   if(results.hasOwnProperty('swimmingpool'))
     user.swimmingPool = 1;
@@ -317,7 +326,7 @@ function  searchNobroker(map, userMap, results, user, senderID) {
     if (user.hasOwnProperty('minrent')) {
       searchURL = searchURL + 'rent=' + user.minrent.trim() + ',' + user.maxrent.trim() + '&';
     } else {
-        searchURL = searchURL + 'rent=0,' + user.maxrent.trim() + '&';
+        searchURL = searchURL + 'rent=' + parseInt(user.maxrent.trim()) * 0.8  + ',' + user.maxrent + '&';
     }
   }
 
@@ -451,7 +460,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           template_type: "generic",
           elements: [{
             title: propertyArray[0].bhk + " BHK in " + propertyArray[0].locality,
-            subtitle: propertyArray[0].title + ". \nRent: " + propertyArray[0].rent + ". \nDeposit: " + propertyArray[0].deposit,
+            // subtitle: propertyArray[0].title + ". \nRent: " + propertyArray[0].rent + ". \nDeposit: " + propertyArray[0].deposit,
             // item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
             buttons: [{
@@ -462,7 +471,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality,
-            subtitle: propertyArray[1].title + ". Rent: " + propertyArray[1].rent + ". \nDeposit: " + propertyArray[1].deposit,
+            // subtitle: propertyArray[1].title + ". Rent: " + propertyArray[1].rent + ". \nDeposit: " + propertyArray[1].deposit,
             // item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
             buttons: [{
@@ -473,7 +482,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality,
-            subtitle: "Rent: " + propertyArray[2].rent,
+            // subtitle: "Rent: " + propertyArray[2].rent,
             // item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
             buttons: [{
@@ -484,7 +493,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality,
-            subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
+            // subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
             // item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
             buttons: [{
@@ -497,7 +506,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             title: 'Show More Properties',
             // subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
             // item_url: propertyArray[3].shortUrl,
-            image_url: "http://d3snwcirvb4r88.cloudfront.net/static/img/logos/nb_logo_trans_2.png",
+            image_url: "https://e27.co/wp-content/uploads/2016/02/NoBroker_1.jpeg",
             buttons: [{
               type: "web_url",
               url: propertyArray[0].url,
