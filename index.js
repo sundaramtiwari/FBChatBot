@@ -463,7 +463,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           elements: [{
             title: propertyArray[0].bhk + " BHK in " + propertyArray[0].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[0].rent + ".",
-            // item_url: propertyArray[0].shortUrl,
+            item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
             buttons: [{
               type: "web_url",
@@ -474,7 +474,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           {
             title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[1].rent + ".",
-            // item_url: propertyArray[1].shortUrl,
+            item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
             buttons: [{
               type: "web_url",
@@ -485,7 +485,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           {
             title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[2].rent + ".",
-            // item_url: propertyArray[2].shortUrl,
+            item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
             buttons: [{
               type: "web_url",
@@ -496,7 +496,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           {
             title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[3].rent + ".",
-            // item_url: propertyArray[3].shortUrl,
+            item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
             buttons: [{
               type: "web_url",
@@ -507,7 +507,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           {
             title: 'Team Nobroker',
             // subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
-            // item_url: propertyArray[3].shortUrl,
+            item_url: propertyArray[3].shortUrl,
             image_url: "https://e27.co/wp-content/uploads/2016/02/NoBroker_1.jpeg",
             buttons: [{
               type: "web_url",
