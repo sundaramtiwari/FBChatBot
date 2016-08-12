@@ -461,7 +461,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
         payload: {
           template_type: "generic",
           elements: [{
-            title: propertyArray[0].bhk + " BHK in " + propertyArray[0].locality,
+            title: propertyArray[0].bhk + " BHK in " + propertyArray[0].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[0].rent + ".",
             // item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
@@ -472,7 +472,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             }]
           },
           {
-            title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality,
+            title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[1].rent + ".",
             // item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
@@ -483,7 +483,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             }]
           },
           {
-            title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality,
+            title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[2].rent + ".",
             // item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
@@ -494,7 +494,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             }]
           },
           {
-            title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality,
+            title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[3].rent + ".",
             // item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
@@ -553,7 +553,7 @@ function sendGenericMessage(recipientId) {
                         "title": "Take me to Nobroker"
                         }, {
                         "type": "postback",
-                        "title": "Recommended Plans",
+                        "title": "Nobroker Home Plans",
                         "payload": "plan"
                       }, {
                         "type": "web_url",
