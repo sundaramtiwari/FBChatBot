@@ -255,14 +255,14 @@ function  searchNobroker(map, userMap, results, user, senderID) {
   if(results.hasOwnProperty('no_of_bedrooms')) {
     user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
   } else if (!(user.asked && user.bhkAsked)) {
-    setTimeOut(echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"), 4000);
+    setTimeout(echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"), 4000);
     user.bhkAsked = 'true';
   }
 
   if(results.hasOwnProperty('maxrent')) {
     user.maxrent = parseInt(results.maxrent[0].value) * 1.2;
   } else if (!(user.asked && user.rentAsked)) {
-     setTimeOut(echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"), 4000);
+     setTimeout(echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"), 4000);
      user.rentAsked = 'true';
   }
 
