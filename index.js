@@ -448,7 +448,8 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   //  client.expire(senderID, 900);
       }
       // sendPropertiesMessage(senderID, propertyArray);
-      sendPropertiesMessage(senderID, propertyArray, function(userPropertyArray, senderID) {
+      sendPropertiesMessage(senderID, propertyArray, function() {
+        echoMessage(senderID, 'Callback called');
         if (userPropertyArray && userPropertyArray.length > 3) {
             user.userPropertyArray = userPropertyArray;
             userMap[senderID] = user;
