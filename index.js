@@ -551,6 +551,7 @@ function showMoreButton(recipientId) {
           type: "template",
           payload: {
             template_type: "button",
+            text: '',
             buttons: [{
             "type": "postback",
             "payload": "showmore",
