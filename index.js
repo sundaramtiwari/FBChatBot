@@ -465,11 +465,11 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             subtitle: "Rent: " + propertyArray[0].rent + ".",
             item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
-            /*buttons: [{
+            buttons: [{
               type: "web_url",
               url: propertyArray[0].shortUrl,
               title: "View Property"
-            }]*/
+            }]
           },
           {
             title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality.split(',')[0],
