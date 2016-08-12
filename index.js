@@ -789,7 +789,7 @@ function receivedPostback(event) {
     makeWitCall('buy', senderID)
   } else if (payload.toString().toLowerCase() === ("showmore")) {
       var user = userMap[senderID];
-      if (user && user.hasOwnProperty('userPropertyArray')) {
+      if (user && user.hasOwnProperty('userPropertyArray') && user.userPropertyArray.length > 3) {
         sendPropertiesMessage(senderID, user.userPropertyArray);
       } else {
         echoMessage(senderID, "Please visit www.nobroker.in for more similar properties.");
