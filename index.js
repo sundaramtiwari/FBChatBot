@@ -433,6 +433,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   }
 
   if (userPropertyArray.length > 3) {
+    echoMessage(senderID, "userPropertyArrayLength: " + userPropertyArray.length);
     user.userPropertyArray = userPropertyArray;
     userMap[senderID] = user;
     setTimeout(showMoreButton(senderID, 4000));
@@ -445,7 +446,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
     if (!user.filterSent) {
       echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.');
       echoMessage(senderID, 'By typing: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\'');
-      user.filterSent = true;
+      user.filterSent = 'true';
       userMap[senderID] = user;
 //  client.hmset(senderID, JSON.stringify(user));
 //  client.expire(senderID, 900);
