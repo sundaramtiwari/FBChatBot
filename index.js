@@ -414,8 +414,8 @@ function sendPropertyResponse(jsonResponse, senderID) {
 
   if (propertyArray.length > 3) {
     sendPropertiesMessage(senderID, propertyArray);
-    echoMessage(senderID, 'You may add filters to search results with your budget, number of bedrooms, furnishing status, swimming pool, gym, lift.');
-    echoMessage(senderID, 'By typing: \'show only 2 bhk\', \'budget 15000\', \'show only with swimming pool.\'');
+    setTimeout(echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.'), 3000);
+    setTimeout(echoMessage(senderID, 'By typing: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\''), 4000);
   } else {
     echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
