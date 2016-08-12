@@ -456,7 +456,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
         //  client.hmset(senderID, JSON.stringify(user));
         //  client.expire(senderID, 900);
         }
-      }
+      });
   } else {
       echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
