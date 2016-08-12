@@ -538,12 +538,7 @@ function sendPropertiesMessage(recipientId, propertyArray, showMoreButtonVar) {
     }
   };  
 
-  callSendAPI(messageData);
-
-  if (showMoreButtonVar) {
-    echoMessage(recipientId, 'inside showMoreButtonVar');
-    setTimeout(showMoreButtonVar(recipientId), 2000);
-  }
+  callSendAPI(messageData, showMoreButtonVar);
 }
 
 var showMoreButtonVar = function showMoreButton(recipientId) {
@@ -662,7 +657,7 @@ function echoMessage(recipientId, messageText) {
   callSendAPI(messageData);
 }
 
-function callSendAPI(messageData) {
+function callSendAPI(messageData, showMoreButtonVar) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -676,6 +671,9 @@ function callSendAPI(messageData) {
 
       console.log("Successfully sent message with id %s to recipient %s", 
         messageId, recipientId);
+      if (showMoreButtonVar) {
+        showMoreButtonVar(recipientId);
+      }
     } else {
       console.error("Unable to send message.");
       console.error(response);
