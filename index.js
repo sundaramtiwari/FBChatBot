@@ -447,23 +447,23 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   //  client.hmset(senderID, JSON.stringify(user));
   //  client.expire(senderID, 900);
       }
-      // sendPropertiesMessage(senderID, propertyArray);
-      sendPropertiesMessage(senderID, propertyArray, function() {
-        echoMessage(senderID, 'Callback called');
-        if (userPropertyArray && userPropertyArray.length > 3) {
+      // sendPropertiesMessage(senderID, propertyArray); 
+      if (userPropertyArray && userPropertyArray.length > 3) {
             user.userPropertyArray = userPropertyArray;
             userMap[senderID] = user;
             showMoreButton(senderID);
+            sendPropertiesMessage(senderID, propertyArray, showMoreButtonVar);
         //  client.hmset(senderID, JSON.stringify(user));
         //  client.expire(senderID, 900);
-        }
-      });
+      } else {
+          sendPropertiesMessage(senderID, propertyArray);
+      }
   } else {
       echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
 }
 
-function sendPropertiesMessage(recipientId, propertyArray) {
+function sendPropertiesMessage(recipientId, propertyArray, showMoreButtonVar) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -539,9 +539,14 @@ function sendPropertiesMessage(recipientId, propertyArray) {
   };  
 
   callSendAPI(messageData);
+
+  if (showMoreButtonVar) {
+    echoMessage(recipientId, 'inside showMoreButtonVar');
+    setTimeout(showMoreButtonVar(recipientId), 2000);
+  }
 }
 
-function showMoreButton(recipientId) {
+var showMoreButtonVar = function showMoreButton(recipientId) {
   var messageData = {
     recipient: {
       id: recipientId
