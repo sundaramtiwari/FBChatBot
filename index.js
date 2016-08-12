@@ -400,6 +400,9 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
     }
     if (data[i]) {
         var prop = new Property();
+        prop.city = data[i].city;
+        prop.localityId = data[i].localityId;
+        prop.nbLocality = data[i].nbLocality;
         prop.bhk = data[i].type.toString().slice(-1);;
         prop.locality = data[i].locality;
         prop.title = data[i].title;
@@ -416,6 +419,14 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
         }
         prop.shortUrl = data[i].shortUrl;
         prop.detailUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
+        if (count == 0) {
+          if (user.intent.toString().indexOf('rent') > -1) {
+            prop.url = 'http://www.nobroker.in/property/rent/' + data[i].city + '/' + data[i].nbLocality + '?nbPlace=' + data[i].localityId;
+          } else {
+            prop.url = 'http://www.nobroker.in/property/sale/' + data[i].city + '/' + data[i].nbLocality + '?nbPlace=' + data[i].localityId;
+          }
+        }
+
         count++;
         propertyArray.push(prop);
     }
@@ -484,12 +495,12 @@ function sendPropertiesMessage(recipientId, propertyArray) {
           },
           {
             title: 'Show More Properties',
-            subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
+            // subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
             // item_url: propertyArray[3].shortUrl,
-            image_url: d3snwcirvb4r88.cloudfront.net/static/img/logos/nb_logo_trans_2.png,
+            image_url: "http://d3snwcirvb4r88.cloudfront.net/static/img/logos/nb_logo_trans_2.png",
             buttons: [{
               type: "web_url",
-              url: propertyArray[3].shortUrl,
+              url: propertyArray[0].url,
               title: "Show More Properties"
             }]
           }]
@@ -531,7 +542,7 @@ function sendGenericMessage(recipientId) {
                         "title": "Take me to Nobroker"
                         }, {
                         "type": "postback",
-                        "title": "Buy or Rent property",
+                        "title": "Recommended Plans",
                         "payload": "plan"
                       }, {
                         "type": "web_url",
