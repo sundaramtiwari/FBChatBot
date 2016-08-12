@@ -326,7 +326,7 @@ function  searchNobroker(map, userMap, results, user, senderID) {
            
   if (user.maxrent) {
     if (user.hasOwnProperty('minrent')) {
-      searchURL = searchURL + 'rent=' + user.minrent.trim() + ',' + user.maxrent.trim() + '&';
+      searchURL = searchURL + 'rent=' + user.minrent + ',' + user.maxrent + '&';
     } else {
         searchURL = searchURL + 'rent=' + parseInt(user.maxrent.toString().trim()) * 0.8  + ',' + user.maxrent + '&';
     }
