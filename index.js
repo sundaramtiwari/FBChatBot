@@ -136,7 +136,7 @@ function makeWitCall(messageText, senderID) {
     request(options, function(error, response, body) {
       if(error) {
         echoMessage(senderID, "Oops! AI Engine failed to understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-        setTimeout(sendPlansMessage(senderID), 1500);
+        setTimeout(sendPlansMessage(senderID), 3000);
       }
       else {
           processWitRespone(senderID, body);
@@ -192,7 +192,7 @@ function processWitRespone(senderID, body) {
       if(error) {
         console.log(error);
         echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-        setTimeout(sendPlansMessage(senderID), 1500);
+        setTimeout(sendPlansMessage(senderID), 3000);
       }
       else {
         var googleResponse = JSON.parse(body);
@@ -364,7 +364,7 @@ function  searchNobroker(map, userMap, results, user, senderID) {
             if(error) {
               console.error(error);
               echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-              setTimeout(sendPlansMessage(senderID), 1500);
+              setTimeout(sendPlansMessage(senderID), 3000);
             } else {
               sendPropertyResponse(JSON.parse(body), senderID, user);
               return;
@@ -441,24 +441,23 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   if (userPropertyArray.length > 3) {
     user.userPropertyArray = userPropertyArray;
     userMap[senderID] = user;
-    echoMessage(senderID, 'Calling showMoreButton');
-    showMoreButton(senderID);
+    setTimeout(showMoreButton(senderID), 5000);
 //  client.hmset(senderID, JSON.stringify(user));
 //  client.expire(senderID, 900);
   }
 
   if (propertyArray.length > 3) {
-    sendPropertiesMessage(senderID, propertyArray);
-    if (!user.filterSent) {
-      echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.');
-      echoMessage(senderID, 'For instance: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\'');
-      user.filterSent = 'true';
-      userMap[senderID] = user;
-//  client.hmset(senderID, JSON.stringify(user));
-//  client.expire(senderID, 900);
-    }
+      if (!user.filterSent) {
+        echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.');
+        echoMessage(senderID, 'For instance: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\'');
+        user.filterSent = 'true';
+        userMap[senderID] = user;
+  //  client.hmset(senderID, JSON.stringify(user));
+  //  client.expire(senderID, 900);
+      }
+      sendPropertiesMessage(senderID, propertyArray);
   } else {
-    echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
+      echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
 }
 
@@ -541,7 +540,6 @@ function sendPropertiesMessage(recipientId, propertyArray) {
 }
 
 function showMoreButton(recipientId) {
-  echoMessage(recipientId, 'inside showmorebutton');
   var messageData = {
     recipient: {
       id: recipientId
@@ -551,13 +549,17 @@ function showMoreButton(recipientId) {
           type: "template",
           payload: {
             template_type: "button",
-            text: 'Show more',
+            text: 'Wish to see more properties?',
             buttons: [{
             "type": "postback",
             "payload": "showmore",
-            "title": "Show more Properties.."
+            "title": "Show More properties"
+            }, {
+            "type": "postback",
+            "payload": "reset",
+            "title": "Reset Search"
             }]
-          }
+        }
       }
     }
   };  
@@ -794,6 +796,11 @@ function receivedPostback(event) {
       } else {
         echoMessage(senderID, "Please visit www.nobroker.in for more similar properties.");
       }
+  } else if(payload.toString().toLowerCase() === ("reset")){
+    userMap[senderID] = new User();
+    // client.hmset(senderID, JSON.stringify(new User()));
+    echoMessage(senderID, "Reset successful!");
+    return;
   } else {
     echoMessage(senderID, "Sorry, didnt understand.");
   }
