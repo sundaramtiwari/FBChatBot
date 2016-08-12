@@ -392,8 +392,8 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
     return 0;
   }
 
-  propertyArray = [];
-  userPropertyArray = [];
+  var propertyArray = [];
+  var userPropertyArray = [];
 
   for (var i=0; count < 9; i++) {
     if (i > 100) {
@@ -439,11 +439,10 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   }
 
   if (userPropertyArray.length > 3) {
-    echoMessage(senderID, 'userPropertyArray lenght: ' + userPropertyArray.length);
     user.userPropertyArray = userPropertyArray;
     userMap[senderID] = user;
+    echoMessage(senderID, 'Calling showMoreButton');
     showMoreButton(senderID);
-    // setTimeout(showMoreButton(senderID), 3000);
 //  client.hmset(senderID, JSON.stringify(user));
 //  client.expire(senderID, 900);
   }
@@ -452,7 +451,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
     sendPropertiesMessage(senderID, propertyArray);
     if (!user.filterSent) {
       echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.');
-      echoMessage(senderID, 'By typing: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\'');
+      echoMessage(senderID, 'For instance: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\'');
       user.filterSent = 'true';
       userMap[senderID] = user;
 //  client.hmset(senderID, JSON.stringify(user));
@@ -542,6 +541,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
 }
 
 function showMoreButton(recipientId) {
+  echoMessage(recipientId, 'inside showmorebutton');
   var messageData = {
     recipient: {
       id: recipientId
@@ -551,7 +551,7 @@ function showMoreButton(recipientId) {
           type: "template",
           payload: {
             template_type: "button",
-            text: '',
+            text: 'Show more',
             buttons: [{
             "type": "postback",
             "payload": "showmore",
