@@ -254,18 +254,18 @@ function  searchNobroker(map, userMap, results, user, senderID) {
 
   if(results.hasOwnProperty('no_of_bedrooms')) {
     user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
-  } else if (!(user.asked && user.bhkAsked)) {
-    this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"); }, 4000);
+  } else if (user.asked === 'false' && !user.bhkAsked) {
     user.bhkAsked = 'true';
     user.asked = 'true';
+    this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"); }, 8000);
   }
 
   if(results.hasOwnProperty('maxrent')) {
     user.maxrent = parseInt(results.maxrent[0].value) * 1.2;
-  } else if (!(user.asked && user.rentAsked)) {
-    this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"); }, 4000);
+  } else if (user.asked === 'false' && !user.rentAsked) {
      user.rentAsked = 'true';
      user.asked = 'true';
+    this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"); }, 8000);
   }
 
   if(results.hasOwnProperty('minrent'))
@@ -505,7 +505,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             }]
           },
           {
-            title: 'Show More Properties',
+            title: 'Team Nobroker',
             // subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
             // item_url: propertyArray[3].shortUrl,
             image_url: "https://e27.co/wp-content/uploads/2016/02/NoBroker_1.jpeg",
