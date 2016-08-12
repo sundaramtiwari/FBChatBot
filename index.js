@@ -1,3 +1,6 @@
+// var redis = require('redis');
+// var client = redis.createClient(port, host);
+
 var request = require('request');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -88,6 +91,11 @@ function receivedMessage(event) {
     console.log('User already in session: ' + userMap[senderID]);
   }
 
+  /*
+  Add user to redis cache:
+  console.log('Adding new user to redis: ' + senderID);
+  client.hmset(senderID, JSON.stringify(new User()));
+  */
   var messageId = message.mid;
   var messageText = message.text;
   var messageAttachments = message.attachments;
@@ -150,12 +158,17 @@ function processWitRespone(senderID, body) {
   var results = jsonResponse.entities;
   var user = userMap[senderID];
 
+  /* client.hgetall(senderID, function(err, object) {
+    user = JSON.parse(object) ;
+  }); */
+
   if (!results) {
     echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
   }
 
   if(results.hasOwnProperty('reset')){
     userMap[senderID] = new User();
+    // client.hmset(senderID, JSON.stringify(new User()));
     echoMessage(senderID, "Session reset for userId: " + senderID);
     return;
   }
@@ -190,8 +203,15 @@ function processWitRespone(senderID, body) {
           var place_id = predictions[0].place_id;
           console.log("Google PlaceId: " + place_id);
           var existing_intent = user.intent;
+
           userMap[senderID] = new User();
           user = userMap[senderID];
+
+      /*  client.hmset(senderID, JSON.stringify(new User()));
+          client.hgetall(senderID, function(err, object) {
+            user = JSON.parse(object) ;
+          });
+      */
           if (existing_intent) {
             user.intent = existing_intent;
           }
@@ -207,7 +227,7 @@ function processWitRespone(senderID, body) {
     searchNobroker(map, userMap, results, user, senderID);
   }
     else {
-      echoMessage(senderID, "Sorry, Unable to understand. Our executives will get in touch with you shortly.");
+      echoMessage(senderID, "Sorry, Unable to . Our executives will get in touch with you shortly.");
       return;
   }
 }
@@ -218,6 +238,8 @@ function  searchNobroker(map, userMap, results, user, senderID) {
           } else if (!user.hasOwnProperty('intent')) {
             askIntent(senderID);
             userMap[senderID] = user;
+        //  client.hmset(senderID, JSON.stringify(user));
+        //  client.expire(senderID, 900);
             return;
           }
 
@@ -269,6 +291,8 @@ function  searchNobroker(map, userMap, results, user, senderID) {
           }
           
           userMap[senderID] = user;
+      //  client.hmset(senderID, JSON.stringify(user));
+      //  client.expire(senderID, 900);
           
           var searchURL;
           if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
@@ -352,13 +376,13 @@ function sendPropertyResponse(jsonResponse, senderID) {
   var data = jsonResponse.data;
 
   if (!data) {
-    echoMessage(senderID, "Hold on... something went wrong with your request. Try again sometime later");
+    echoMessage(senderID, "Oops! something went wrong with your request. Try again sometime later");
     return 0;
   }
 
   if (data.length === 0) {
     echoMessage(senderID, "Oops! No matching properties found! \n Type \'reset\' to reset your filters.");
-    setTimeout(sendPlansMessage(senderID), 1500);
+    // setTimeout(sendPlansMessage(senderID), 1500);
     return 0;
   }
 
@@ -390,6 +414,8 @@ function sendPropertyResponse(jsonResponse, senderID) {
 
   if (propertyArray.length > 3) {
     sendPropertiesMessage(senderID, propertyArray);
+    echoMessage(senderID, 'You may add filters to search results with your budget, number of bedrooms, furnishing status, swimming pool, gym, lift.');
+    echoMessage(senderID, 'By typing: \'show only 2 bhk\', \'budget 15000\', \'show only with swimming pool.\'');
   } else {
     echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
   }
@@ -496,7 +522,7 @@ function sendGenericMessage(recipientId) {
                   type: "template",
                   payload: {
                     template_type: "button",
-                    text: 'Dear ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \'2 bhk flats in koramangala bangalore\'\n\n',
+                    text: 'Dear ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \'2 bhk flats in koramangala bangalore.\'\n\n',
                     buttons: [{
                         "type": "web_url",
                         "url": "http://www.nobroker.in/tenant/plans",
@@ -505,7 +531,12 @@ function sendGenericMessage(recipientId) {
                         "type": "postback",
                         "title": "Buy or Rent property",
                         "payload": "plan"
-                    }]
+                      }, {
+                        "type": "web_url",
+                        "title": "Post your property",
+                        "url": "http://www.nobroker.in/list-your-property-for-rent-sale"
+                      }
+                    ]
                 }
               }
             }
@@ -663,17 +694,31 @@ function receivedPostback(event) {
   } else if (payload.toString().toLowerCase() === ("rent")) {
     if (!userMap.hasOwnProperty(senderID)) {
       console.error('Adding new user to session: ' + senderID);
-      userMap[senderID] = new User();
+      var user = new User();
+      user.intent = 'rent';
+      userMap[senderID] = user;
+  //  client.hmset(senderID, JSON.stringify(user));
+  //  client.expire(senderID, 900);
     }
     var user = userMap[senderID];
+/*  client.hgetall(senderID, function(err, object) {
+      user = JSON.parse(object) ;
+    });
+*/
     user.intent = 'rent';
     makeWitCall('rent', senderID)
   } else if (payload.toString().toLowerCase() === ("buy")) {
     if (!userMap.hasOwnProperty(senderID)) {
       console.error('Adding new user to session: ' + senderID);
       userMap[senderID] = new User();
+  //  client.hmset(senderID, JSON.stringify(user));
+  //  client.expire(senderID, 900);
     }
     var user = userMap[senderID];
+/*  client.hgetall(senderID, function(err, object) {
+      user = JSON.parse(object) ;
+    });
+*/
     user.intent = 'buy';
     makeWitCall('buy', senderID)
   } 
