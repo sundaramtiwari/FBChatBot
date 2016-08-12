@@ -451,7 +451,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
       if (userPropertyArray && userPropertyArray.length > 3) {
             user.userPropertyArray = userPropertyArray;
             userMap[senderID] = user;
-            showMoreButton(senderID);
+            // showMoreButton(senderID);
             sendPropertiesMessage(senderID, propertyArray, showMoreButtonVar);
         //  client.hmset(senderID, JSON.stringify(user));
         //  client.expire(senderID, 900);
