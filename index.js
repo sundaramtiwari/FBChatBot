@@ -480,8 +480,8 @@ function sendPropertiesMessage(recipientId, propertyArray) {
               type: "web_url",
               url: propertyArray[3].shortUrl,
               title: "View Property"
-            }],
-          }
+            }]
+          },
           {
             title: 'Show More Properties',
             subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
