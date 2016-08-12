@@ -442,7 +442,8 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
     echoMessage(senderID, 'userPropertyArray lenght: ' + userPropertyArray.length);
     user.userPropertyArray = userPropertyArray;
     userMap[senderID] = user;
-    setTimeout(showMoreButton(senderID), 3000);
+    showMoreButton(senderID);
+    // setTimeout(showMoreButton(senderID), 3000);
 //  client.hmset(senderID, JSON.stringify(user));
 //  client.expire(senderID, 900);
   }
@@ -787,7 +788,7 @@ function receivedPostback(event) {
     makeWitCall('buy', senderID)
   } else if (payload.toString().toLowerCase() === ("showmore")) {
       var user = userMap[senderID];
-      if (user.hasOwnProperty('userPropertyArray')) {
+      if (user && user.hasOwnProperty('userPropertyArray')) {
         sendPropertiesMessage(senderID, user.userPropertyArray);
       } else {
         echoMessage(senderID, "Please visit www.nobroker.in for more similar properties.");
