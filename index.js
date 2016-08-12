@@ -102,11 +102,11 @@ function receivedMessage(event) {
 
   if (messageText) {
 
-    if (messageText.toLowerCase().indexOf("hi") > -1 || messageText.toLowerCase().indexOf("hello") > -1
-        || messageText.toLowerCase().indexOf("hey") > -1 || messageText.toLowerCase().indexOf("up") > -1) {
+    /*if (messageText.toLowerCase().indexOf("hi") > -1 || messageText.toLowerCase().indexOf("hello") > -1
+        || messageText.toLowerCase().indexOf("hey") > -1) {
       sendGenericMessage(senderID);
       return;
-    }
+    }*/
 
     if (messageText.indexOf("plan") > -1) {
       sendPlansMessage(senderID);
@@ -224,9 +224,15 @@ function processWitRespone(senderID, body) {
     });
 
   } else if (user.hasOwnProperty('location')) {
+    if(results.hasOwnProperty('greeting')){
+      sendGenericMessage(senderID);
+      return;
+    }
     searchNobroker(map, userMap, results, user, senderID);
-  }
-    else {
+  } else if(results.hasOwnProperty('greeting')){
+      sendGenericMessage(senderID);
+      return;
+  } else {
       echoMessage(senderID, "Sorry, Unable to . Our executives will get in touch with you shortly.");
       return;
   }
@@ -433,6 +439,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   }
 
   if (userPropertyArray.length > 3) {
+    echoMessage(senderID, 'userPropertyArray lenght: ' + userPropertyArray.length);
     user.userPropertyArray = userPropertyArray;
     userMap[senderID] = user;
     setTimeout(showMoreButton(senderID), 3000);
