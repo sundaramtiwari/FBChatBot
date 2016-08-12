@@ -239,137 +239,137 @@ function processWitRespone(senderID, body) {
 }
 
 function  searchNobroker(map, userMap, results, user, senderID) {
-          if(results.hasOwnProperty('intent')){
-            user.intent = results.intent[0].value;
-          } else if (!user.hasOwnProperty('intent')) {
-            askIntent(senderID);
-            userMap[senderID] = user;
-        //  client.hmset(senderID, JSON.stringify(user));
-        //  client.expire(senderID, 900);
-            return;
-          }
-
-          echoMessage(senderID, "Just a sec, I’m looking that up...");
-
-          if(results.hasOwnProperty('no_of_bedrooms'))
-            user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
-
-          if(results.hasOwnProperty('maxrent'))
-           user.maxrent = results.maxrent[0].value;
-
-          if(results.hasOwnProperty('minrent'))
-            user.minrent = results.minrent[0].value;
-
-          if(results.hasOwnProperty('swimmingpool'))
-           user.swimmingPool = 1;
-
-          if(results.hasOwnProperty('gym'))
-           user.gym = 1;
-
-          if(results.hasOwnProperty('lift'))
-           user.lift = 1;
-
-          if(results.hasOwnProperty('parking')){
-            map['parking'] = results.parking[0].value;
-            if (map['parking'].toLowerCase().indexOf("car") > -1) {
-              map['parking'] = 'car';
-            }
-            user.parking = map['parking'];
-          }
-
-          if(results.hasOwnProperty('leaseType')){
-            map['leaseType'] = results.leaseType[0].value;
-            if (map['leaseType'].toLowerCase().indexOf("family") > -1) {
-              map['leaseType'] = 'family';
-            }
-            user.leaseType = map['leaseType'];
-          }
-
-          if(results.hasOwnProperty('furnishing')){
-            map['furnishing'] = results.furnishing[0].value;
-            if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
-              user.furnishing = 'NOT_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
-              user.furnishing = 'SEMI_FURNISHED';
-            } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
-              user.furnishing = 'FULLY_FURNISHED';
-            }
-          }
-          
-          userMap[senderID] = user;
+  if(results.hasOwnProperty('intent')){
+      user.intent = results.intent[0].value;
+  } else if (!user.hasOwnProperty('intent')) {
+      askIntent(senderID);
+      userMap[senderID] = user;
       //  client.hmset(senderID, JSON.stringify(user));
       //  client.expire(senderID, 900);
-          
-          var searchURL;
-          if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
-            searchURL = 'http://www.nobroker.in/api/v1/property/sale/filter/region/';
-          } else {
-            searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
-          }
-          searchURL = searchURL + user.location.trim();
-          searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
+      return;
+  }
 
-          if (user.bhk) {
-            searchURL = searchURL + 'type=BHK' +user.bhk.trim() + '&'; 
-          }
+  echoMessage(senderID, "Just a sec, I’m looking that up...");
+
+  if(results.hasOwnProperty('no_of_bedrooms'))
+    user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
+
+  if(results.hasOwnProperty('maxrent'))
+    user.maxrent = results.maxrent[0].value;
+
+  if(results.hasOwnProperty('minrent'))
+    user.minrent = results.minrent[0].value;
+
+  if(results.hasOwnProperty('swimmingpool'))
+    user.swimmingPool = 1;
+
+  if(results.hasOwnProperty('gym'))
+    user.gym = 1;
+
+  if(results.hasOwnProperty('lift'))
+    user.lift = 1;
+
+  if(results.hasOwnProperty('parking')){
+      map['parking'] = results.parking[0].value;
+      if (map['parking'].toLowerCase().indexOf("car") > -1) {
+          map['parking'] = 'car';
+      }
+      user.parking = map['parking'];
+  }
+
+  if(results.hasOwnProperty('leaseType')){
+    map['leaseType'] = results.leaseType[0].value;
+    if (map['leaseType'].toLowerCase().indexOf("family") > -1) {
+      map['leaseType'] = 'family';
+    }
+    user.leaseType = map['leaseType'];
+  }
+
+  if(results.hasOwnProperty('furnishing')){
+    map['furnishing'] = results.furnishing[0].value;
+    if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
+      user.furnishing = 'NOT_FURNISHED';
+    } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
+        user.furnishing = 'SEMI_FURNISHED';
+    } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
+        user.furnishing = 'FULLY_FURNISHED';
+    }
+  }
+          
+  userMap[senderID] = user;
+  //  client.hmset(senderID, JSON.stringify(user));
+  //  client.expire(senderID, 900);
+          
+  var searchURL;
+  if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
+    searchURL = 'http://www.nobroker.in/api/v1/property/sale/filter/region/';
+  } else {
+      searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
+  }
+  searchURL = searchURL + user.location.trim();
+  searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
+
+  if (user.bhk) {
+    searchURL = searchURL + 'type=BHK' +user.bhk.trim() + '&'; 
+  }
            
-          if (user.maxrent) {
-            if (user.hasOwnProperty('minrent')) {
-              searchURL = searchURL + 'rent=' + user.minrent.trim() + ',' + user.maxrent.trim() + '&';
-            } else {
-              searchURL = searchURL + 'rent=0,' + user.maxrent.trim() + '&';
-            }
-          }
+  if (user.maxrent) {
+    if (user.hasOwnProperty('minrent')) {
+      searchURL = searchURL + 'rent=' + user.minrent.trim() + ',' + user.maxrent.trim() + '&';
+    } else {
+        searchURL = searchURL + 'rent=0,' + user.maxrent.trim() + '&';
+    }
+  }
 
-          if (user.hasOwnProperty('swimmingPool')) {
-            searchURL = searchURL + 'swimmingPool=1&';
-          }
+  if (user.hasOwnProperty('swimmingPool')) {
+    searchURL = searchURL + 'swimmingPool=1&';
+  }
 
-          if (user.hasOwnProperty('gym')) {
-            searchURL = searchURL + 'gym=1&';
-          }
+  if (user.hasOwnProperty('gym')) {
+    searchURL = searchURL + 'gym=1&';
+  }
 
-          if (user.hasOwnProperty('lift')) {
-            searchURL = searchURL + 'lift=1&';
-          }
+  if (user.hasOwnProperty('lift')) {
+    searchURL = searchURL + 'lift=1&';
+  }
 
-          if (user.hasOwnProperty('furnishing')) {
-            searchURL = searchURL + 'furnishing=' + user.furnishing + '&';
-          }
+  if (user.hasOwnProperty('furnishing')) {
+    searchURL = searchURL + 'furnishing=' + user.furnishing + '&';
+  }
 
-          if (user.parking) {
-            if (user.parking.toString().toLowerCase() === "car") {
-              searchURL = searchURL + 'parking=FOUR_WHEELER&';
-            } else {
-              searchURL = searchURL + 'parking=TWO_WHEELER&';
-            }
-          }
+  if (user.parking) {
+    if (user.parking.toString().toLowerCase() === "car") {
+      searchURL = searchURL + 'parking=FOUR_WHEELER&';
+    } else {
+        searchURL = searchURL + 'parking=TWO_WHEELER&';
+    }
+  }
 
-          if (user.leaseType) {
-            if (user.leaseType.toString().toLowerCase() === "family") {
-              searchURL = searchURL + 'leaseType=FAMILY&';
-            } else {
-              searchURL = searchURL + 'parking=BACHELOR&';
-            }
-          }
+  if (user.leaseType) {
+    if (user.leaseType.toString().toLowerCase() === "family") {
+      searchURL = searchURL + 'leaseType=FAMILY&';
+    } else {
+        searchURL = searchURL + 'parking=BACHELOR&';
+    }
+  }
 
-          console.log("NoBroker Search URL: " + searchURL);
+  console.log("NoBroker Search URL: " + searchURL);
           
-          options = {
-            uri: searchURL,
-            method: 'GET',
-          }
+  options = {
+    uri: searchURL,
+    method: 'GET',
+  }
 
-          request(options, function(error, response, body) {
-            if(error) {
-              console.error(error);
-              echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-              setTimeout(sendPlansMessage(senderID), 3000);
-            } else {
-              sendPropertyResponse(JSON.parse(body), senderID, user);
-              return;
-            }
-          });
+  request(options, function(error, response, body) {
+    if(error) {
+      console.error(error);
+      echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
+      // setTimeout(sendPlansMessage(senderID), 3000);
+      } else {
+        sendPropertyResponse(JSON.parse(body), senderID, user);
+        return;
+      }
+  });
 }
 
 var propertyArray = [];
@@ -393,14 +393,15 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   }
 
   var propertyArray = [];
-  var userPropertyArray = [];
 
-  for (var i=0; count < 9; i++) {
+  for (var i=0; count < 4; i++) {
     if (i > 100) {
       break;
     }
-    if (data[i] && count < 4) {
+    if (data[i]) {
         var prop = new Property();
+        prop.bhk = data[i].type.toString().slice(-1);;
+        prop.locality = data[i].locality;
         prop.title = data[i].title;
         prop.description = data[i].description;
         prop.rent = data[i].rent;
@@ -417,53 +418,17 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
         prop.detailUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
         count++;
         propertyArray.push(prop);
-    } else if (data[i] && count >= 4) {
-        var prop = new Property();
-        prop.title = data[i].title;
-        prop.description = data[i].description;
-        prop.rent = data[i].rent;
-        prop.deposit = data[i].deposit;
-        var photos = data[i].photos;
-        if (photos.length > 0) {
-          imageStr = photos[0].imagesMap.original;
-          img = imageStr.split('_')[0] + '/';
-          prop.image = 'http://d3snwcirvb4r88.cloudfront.net/images/' + img + imageStr;
-        } else {
-          continue;
-        }
-        prop.shortUrl = data[i].shortUrl;
-        prop.detailUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
-        count++;
-        userPropertyArray.push(prop);
     }
   }
 
   if (propertyArray.length > 3) {
-      if (!user.filterSent) {
-        echoMessage(senderID, 'You can add filters like your budget, number of bedrooms, furnishing status, gym, lift.');
-        echoMessage(senderID, 'For instance: \'show only 2 bhk\', \'budget 15000\', \'show only with gym.\'');
-        user.filterSent = 'true';
-        userMap[senderID] = user;
-  //  client.hmset(senderID, JSON.stringify(user));
-  //  client.expire(senderID, 900);
-      }
-      // sendPropertiesMessage(senderID, propertyArray); 
-      if (userPropertyArray && userPropertyArray.length > 3) {
-            user.userPropertyArray = userPropertyArray;
-            userMap[senderID] = user;
-            // showMoreButton(senderID);
-            sendPropertiesMessage(senderID, propertyArray, showMoreButtonVar);
-        //  client.hmset(senderID, JSON.stringify(user));
-        //  client.expire(senderID, 900);
-      } else {
-          sendPropertiesMessage(senderID, propertyArray);
-      }
+      sendPropertiesMessage(senderID, propertyArray);
   } else {
-      echoMessage(senderID, 'Sorry! No matching properties found. Type \'reset\' to reset your filters.');
+      echoMessage(senderID, 'Sorry! No matching properties found. Please visit www.nobroker.in.');
   }
 }
 
-function sendPropertiesMessage(recipientId, propertyArray, showMoreButtonVar) {
+function sendPropertiesMessage(recipientId, propertyArray) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -474,93 +439,59 @@ function sendPropertiesMessage(recipientId, propertyArray, showMoreButtonVar) {
         payload: {
           template_type: "generic",
           elements: [{
-            title: "Recommended Property",
+            title: propertyArray[0].bhk + " BHK in " + propertyArray[0].locality,
             subtitle: propertyArray[0].title + ". \nRent: " + propertyArray[0].rent + ". \nDeposit: " + propertyArray[0].deposit,
-            item_url: propertyArray[0].shortUrl,
+            // item_url: propertyArray[0].shortUrl,
             image_url: propertyArray[0].image,
             buttons: [{
               type: "web_url",
-              url: propertyArray[0].detailUrl,
+              url: propertyArray[0].shortUrl,
               title: "View Property"
-            }, {
-              type: "postback",
-              title: "Read Here",
-              payload: propertyArray[0].description.substring(0, 999),
             }]
           },
           {
-            title: "Recommended Property",
+            title: propertyArray[1].bhk + " BHK in " + propertyArray[1].locality,
             subtitle: propertyArray[1].title + ". Rent: " + propertyArray[1].rent + ". \nDeposit: " + propertyArray[1].deposit,
-            item_url: propertyArray[1].shortUrl,
+            // item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
             buttons: [{
               type: "web_url",
-              url: propertyArray[1].detailUrl,
+              url: propertyArray[1].shortUrl,
               title: "View Property"
-            }, {
-              type: "postback",
-              title: "Read Here",
-              payload: propertyArray[1].description.substring(0, 999),
             }]
           },
           {
-            title: "Recommended Property",
-            subtitle: propertyArray[2].title + ". Rent: " + propertyArray[2].rent + ". \nDeposit: " + propertyArray[2].deposit,
-            item_url: propertyArray[2].shortUrl,
+            title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality,
+            subtitle: "Rent: " + propertyArray[2].rent,
+            // item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
             buttons: [{
               type: "web_url",
-              url: propertyArray[2].detailUrl,
+              url: propertyArray[2].shortUrl,
               title: "View Property"
-            }, {
-              type: "postback",
-              title: "Read Here",
-              payload: propertyArray[2].description.substring(0, 999),
             }]
           },
           {
-            title: "Recommended Property",
+            title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality,
             subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
-            item_url: propertyArray[3].shortUrl,
+            // item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
             buttons: [{
               type: "web_url",
-              url: propertyArray[3].detailUrl,
+              url: propertyArray[3].shortUrl,
               title: "View Property"
-            }, {
-              type: "postback",
-              title: "Read Here",
-              payload: propertyArray[3].description.substring(0, 999),
+            },
+          {
+            title: 'Show More Properties',
+            subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
+            // item_url: propertyArray[3].shortUrl,
+            image_url: http:\/\/d3snwcirvb4r88.cloudfront.net/static/img/logos/nb_logo_trans_2.png,
+            buttons: [{
+              type: "web_url",
+              url: propertyArray[3].shortUrl,
+              title: "Show More Properties"
             }]
           }]
-        }
-      }
-    }
-  };  
-
-  callSendAPI(messageData, showMoreButtonVar);
-}
-
-var showMoreButtonVar = function showMoreButton(recipientId) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-          type: "template",
-          payload: {
-            template_type: "button",
-            text: 'Wish to see more properties?',
-            buttons: [{
-            "type": "postback",
-            "payload": "showmore",
-            "title": "Show More properties"
-            }, {
-            "type": "postback",
-            "payload": "reset",
-            "title": "Reset Search"
-            }]
         }
       }
     }
@@ -657,7 +588,7 @@ function echoMessage(recipientId, messageText) {
   callSendAPI(messageData);
 }
 
-function callSendAPI(messageData, showMoreButtonVar) {
+function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -671,9 +602,6 @@ function callSendAPI(messageData, showMoreButtonVar) {
 
       console.log("Successfully sent message with id %s to recipient %s", 
         messageId, recipientId);
-      if (showMoreButtonVar) {
-        showMoreButtonVar(recipientId);
-      }
     } else {
       console.error("Unable to send message.");
       console.error(response);
@@ -794,13 +722,6 @@ function receivedPostback(event) {
 */
     user.intent = 'buy';
     makeWitCall('buy', senderID)
-  } else if (payload.toString().toLowerCase() === ("showmore")) {
-      var user = userMap[senderID];
-      if (user && user.hasOwnProperty('userPropertyArray') && user.userPropertyArray.length > 3) {
-        sendPropertiesMessage(senderID, user.userPropertyArray);
-      } else {
-        echoMessage(senderID, "Please visit www.nobroker.in for more similar properties.");
-      }
   } else if(payload.toString().toLowerCase() === ("reset")){
     userMap[senderID] = new User();
     // client.hmset(senderID, JSON.stringify(new User()));
