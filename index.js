@@ -485,7 +485,7 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             title: 'Show More Properties',
             subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
             // item_url: propertyArray[3].shortUrl,
-            image_url: http:\/\/d3snwcirvb4r88.cloudfront.net/static/img/logos/nb_logo_trans_2.png,
+            image_url: d3snwcirvb4r88.cloudfront.net/static/img/logos/nb_logo_trans_2.png,
             buttons: [{
               type: "web_url",
               url: propertyArray[3].shortUrl,
