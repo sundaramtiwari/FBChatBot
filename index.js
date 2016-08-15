@@ -705,7 +705,7 @@ function sendTypingAction(recipientId, action) {
     "recipient":{
       "id": recipientId
     },
-    "sender_action": action;
+    "sender_action": action
   };  
 
   callSendAPI(messageData);
