@@ -256,21 +256,11 @@ function  searchNobroker(map, userMap, results, user, senderID) {
 
   echoMessage(senderID, "Just a sec, I’m looking that up...");
 
-  if(results.hasOwnProperty('no_of_bedrooms')) {
+  if(results.hasOwnProperty('no_of_bedrooms'))
     user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
-  } else if (user.asked === 'false' && !user.bhkAsked) {
-    user.bhkAsked = 'true';
-    user.asked = 'true';
-    this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"); }, 8000);
-  }
 
-  if(results.hasOwnProperty('maxrent')) {
+  if(results.hasOwnProperty('maxrent'))
     user.maxrent = parseInt(results.maxrent[0].value) * 1.2;
-  } else if (user.asked === 'false' && !user.rentAsked) {
-     user.rentAsked = 'true';
-     user.asked = 'true';
-    this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"); }, 8000);
-  }
 
   if(results.hasOwnProperty('minrent'))
     user.minrent = parseInt(results.minrent[0].value) * 0.8;
@@ -449,8 +439,23 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
 
   if (propertyArray.length > 3) {
       sendPropertiesMessage(senderID, propertyArray);
+
+      if (user.asked === 'false' && !user.bhkAsked) {
+        user.bhkAsked = 'true';
+        user.asked = 'true';
+        this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"); }, 4000);
+      }
+
+      if (user.asked === 'false' && !user.rentAsked) {
+        user.rentAsked = 'true';
+        user.asked = 'true';
+        this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"); }, 8000);
+      }
+      userMap[senderID] = user;
+      //  client.hmset(senderID, JSON.stringify(user));
+      //  client.expire(senderID, 900);
   } else {
-      echoMessage(senderID, 'Sorry! No matching properties found. Please visit www.nobroker.in.');
+      echoMessage(senderID, 'Sorry! We are unable to find premium properties matching your requirement. Please visit www.nobroker.in.');
   }
 }
 
