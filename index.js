@@ -222,6 +222,8 @@ function processWitRespone(senderID, body) {
           user.location = place_id;
 
           searchNobroker(map, userMap, results, user, senderID);
+        } else {
+          echoMessage(senderID, "Sorry, Unable to identify your location. Please try again.");
         }
       }
     });
