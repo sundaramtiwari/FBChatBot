@@ -392,7 +392,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   }
 
   if (data.length === 0) {
-    echoMessage(senderID, "Oops! No matching properties found! \n Type \'reset\' to reset your filters.");
+    echoMessage(senderID, 'Sorry! We are unable to find premium properties matching your requirement. Please visit www.nobroker.in.');
     // setTimeout(sendPlansMessage(senderID), 1500);
     return 0;
   }
