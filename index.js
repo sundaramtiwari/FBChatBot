@@ -705,7 +705,6 @@ function sendTypingAction(recipientId, action) {
     "recipient":{
       "id": recipientId
     },
-    "mark_seen"
     "sender_action": action;
   };  
 
