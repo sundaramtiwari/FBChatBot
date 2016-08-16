@@ -115,7 +115,7 @@ function receivedMessage(event) {
       return;
     }
 
-    if (messageText.toLowerCase().indexOf("thnk") > -1) {
+    if (messageText.toLowerCase().indexOf("thnk") > -1 || messageText.toLowerCase().indexOf("thank") > -1) {
       echoMessage(senderID, "Happy to help!");
       return;
     }
@@ -169,8 +169,9 @@ function processWitRespone(senderID, body) {
     user = JSON.parse(object) ;
   }); */
 
-  if (!results) {
+  if (!results || typeof results === 'undefined') {
     echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
+    return;
   }
 
   user.asked = 'false';
