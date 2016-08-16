@@ -70,6 +70,7 @@ function User(){
 }
 
 var userMap = {};
+var genericMsgSent = 'false';
 
 function receivedMessage(event) {
   var senderID = event.sender.id;
@@ -90,6 +91,7 @@ function receivedMessage(event) {
     console.log('Adding new user to session: ' + senderID);
     userMap[senderID] = new User();
     sendGenericMessage(senderID);
+    genericMsgSent = 'true';
   } else {
     console.log('User already in session: ' + userMap[senderID]);
   }
@@ -188,7 +190,7 @@ function processWitRespone(senderID, body) {
     return;
   }
 
-  if(results.hasOwnProperty('greeting')) {
+  if(results.hasOwnProperty('greeting') && genericMsgSent === 'false') {
       sendGenericMessage(senderID);
       return;
   }
