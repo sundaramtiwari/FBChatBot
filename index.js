@@ -110,12 +110,12 @@ function receivedMessage(event) {
       return;
     }*/
 
-    if (messageText.indexOf("plan") > -1) {
+    if (messageText.toLowerCase().indexOf("plan") > -1) {
       sendPlansMessage(senderID);
       return;
     }
 
-    if (messageText.indexOf("thnk") > -1) {
+    if (messageText.toLowerCase().indexOf("thnk") > -1) {
       echoMessage(senderID, "Happy to help!");
       return;
     }
@@ -783,6 +783,7 @@ function receivedPostback(event) {
     });
 */
     user.intent = 'rent';
+    user.isSearchReq = 'true';
     makeWitCall('rent', senderID)
   } else if (payload.toString().toLowerCase() === ("buy")) {
     if (!userMap.hasOwnProperty(senderID)) {
@@ -797,6 +798,7 @@ function receivedPostback(event) {
     });
 */
     user.intent = 'buy';
+    user.isSearchReq = 'true';
     makeWitCall('buy', senderID)
   } else if(payload.toString().toLowerCase() === ("reset")){
     userMap[senderID] = new User();
