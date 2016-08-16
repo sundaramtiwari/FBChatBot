@@ -305,6 +305,9 @@ function processWitRespone(senderID, body) {
           }
           console.log("Session reset for userId: " + senderID);
           user.location = place_id;
+          userMap[senderID] = user;
+          //  client.hmset(senderID, JSON.stringify(user));
+          //  client.expire(senderID, 900);
 
           searchNobroker(user, senderID);
         } else {
@@ -331,14 +334,19 @@ function processWitRespone(senderID, body) {
 }
 
 function  searchNobroker(user, senderID) {
+  if (!user.location) {
+    echoMessage(senderID, "Please type the location you are looking for rent/buy property");
+    return;
+  }
+  
   echoMessage(senderID, "Just a sec, I’m looking that up...");
-          
   var searchURL;
   if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
     searchURL = 'http://www.nobroker.in/api/v1/property/sale/filter/region/';
   } else {
       searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
   }
+
   searchURL = searchURL + user.location.trim();
   searchURL = searchURL + '?withPics=1&sharedAccomodation=0&pageNo=1&';
 
