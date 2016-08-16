@@ -332,6 +332,9 @@ function processWitRespone(senderID, body) {
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
       if(results.hasOwnProperty('intent')) {
         user.intent = results.intent[0].value;
+        if (user.intent === 'sell') {
+          sendPostYourPropertyMessage(senderID);
+        }
       } else if (!user.hasOwnProperty('intent')) {
           askIntent(senderID);
           userMap[senderID] = user;
