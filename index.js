@@ -188,16 +188,6 @@ function processWitRespone(senderID, body) {
       return;
   }
 
-  if(results.hasOwnProperty('intent')){
-      user.intent = results.intent[0].value;
-  } else if (!user.hasOwnProperty('intent')) {
-      askIntent(senderID);
-      userMap[senderID] = user;
-      //  client.hmset(senderID, JSON.stringify(user));
-      //  client.expire(senderID, 900);
-      return;
-  }
-
   if(results.hasOwnProperty('no_of_bedrooms')) {
     user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
     user.isSearchReq = 'true';
@@ -266,6 +256,15 @@ function processWitRespone(senderID, body) {
     map['location'] = results.location[0].value;
     console.log('User Loc by text: ' + map['location']);
 
+    if(results.hasOwnProperty('intent')) {
+      user.intent = results.intent[0].value;
+    } else if (!user.hasOwnProperty('intent')) {
+        askIntent(senderID);
+        userMap[senderID] = user;
+        //  client.hmset(senderID, JSON.stringify(user));
+        //  client.expire(senderID, 900);
+        return;
+    }
     googleQueryString = encodeURIComponent(map['location']);
 
     googleUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCwy2ETEJXPynpNXJggwjzsHxFcG3Il34o&input='
@@ -315,6 +314,15 @@ function processWitRespone(senderID, body) {
     });
 
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
+      if(results.hasOwnProperty('intent')) {
+        user.intent = results.intent[0].value;
+      } else if (!user.hasOwnProperty('intent')) {
+          askIntent(senderID);
+          userMap[senderID] = user;
+          //  client.hmset(senderID, JSON.stringify(user));
+          //  client.expire(senderID, 900);
+          return;
+      }
     searchNobroker(map, userMap, results, user, senderID);
   } else {
       echoMessage(senderID, "Please type the location you are looking for rent/buy property");
