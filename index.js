@@ -292,20 +292,18 @@ function processWitRespone(senderID, body) {
           console.log("Predictions Count: " + predictions.length);
           var place_id = predictions[0].place_id;
           console.log("Google PlaceId: " + place_id);
-          var existing_intent = user.intent;
-
+          /*var existing_intent = user.intent;
           userMap[senderID] = new User();
           user = userMap[senderID];
-          /*  client.hmset(senderID, JSON.stringify(new User()));
+            client.hmset(senderID, JSON.stringify(new User()));
               client.hgetall(senderID, function(err, object) {
                 user = JSON.parse(object) ;
               });
-          */
 
           if (existing_intent) {
             user.intent = existing_intent;
           }
-          console.log("Session reset for userId: " + senderID);
+          console.log("Session reset for userId: " + senderID);*/
           user.location = place_id;
           userMap[senderID] = user;
           //  client.hmset(senderID, JSON.stringify(user));
