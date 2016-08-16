@@ -306,7 +306,7 @@ function processWitRespone(senderID, body) {
           console.log("Session reset for userId: " + senderID);
           user.location = place_id;
 
-          searchNobroker(map, userMap, results, user, senderID);
+          searchNobroker(user, senderID);
         } else {
           echoMessage(senderID, "Sorry, Unable to identify your location. Please try again.");
         }
@@ -323,14 +323,14 @@ function processWitRespone(senderID, body) {
           //  client.expire(senderID, 900);
           return;
       }
-    searchNobroker(map, userMap, results, user, senderID);
+    searchNobroker(user, senderID);
   } else {
       echoMessage(senderID, "Please type the location you are looking for rent/buy property");
       return;
   }
 }
 
-function  searchNobroker(map, userMap, results, user, senderID) {
+function  searchNobroker(user, senderID) {
   echoMessage(senderID, "Just a sec, I’m looking that up...");
           
   var searchURL;
@@ -769,37 +769,37 @@ function receivedPostback(event) {
     messageText = "Guaranteed home solutions with a personal assistant.";
     echoMessage(senderID, messageText);
   } else if (payload.toString().toLowerCase() === ("rent")) {
-    if (!userMap.hasOwnProperty(senderID)) {
-      console.error('Adding new user to session: ' + senderID);
-      var user = new User();
+      if (!userMap.hasOwnProperty(senderID)) {
+        console.error('Adding new user to session: ' + senderID);
+        var user = new User();
+        user.intent = 'rent';
+        userMap[senderID] = user;
+        //  client.hmset(senderID, JSON.stringify(user));
+        //  client.expire(senderID, 900);
+      }
+      var user = userMap[senderID];
+      /*  client.hgetall(senderID, function(err, object) {
+          user = JSON.parse(object) ;
+          }); */
       user.intent = 'rent';
-      userMap[senderID] = user;
-  //  client.hmset(senderID, JSON.stringify(user));
-  //  client.expire(senderID, 900);
-    }
-    var user = userMap[senderID];
-/*  client.hgetall(senderID, function(err, object) {
-      user = JSON.parse(object) ;
-    });
-*/
-    user.intent = 'rent';
-    user.isSearchReq = 'true';
-    makeWitCall('rent', senderID)
+      user.isSearchReq = 'true';
+      // makeWitCall('rent', senderID);
+      searchNobroker(user, senderID);
   } else if (payload.toString().toLowerCase() === ("buy")) {
-    if (!userMap.hasOwnProperty(senderID)) {
-      console.error('Adding new user to session: ' + senderID);
-      userMap[senderID] = new User();
-  //  client.hmset(senderID, JSON.stringify(user));
-  //  client.expire(senderID, 900);
-    }
-    var user = userMap[senderID];
-/*  client.hgetall(senderID, function(err, object) {
-      user = JSON.parse(object) ;
-    });
-*/
-    user.intent = 'buy';
-    user.isSearchReq = 'true';
-    makeWitCall('buy', senderID)
+      if (!userMap.hasOwnProperty(senderID)) {
+        console.error('Adding new user to session: ' + senderID);
+        userMap[senderID] = new User();
+        //  client.hmset(senderID, JSON.stringify(user));
+        //  client.expire(senderID, 900);
+      }
+      var user = userMap[senderID];
+      /*  client.hgetall(senderID, function(err, object) {
+            user = JSON.parse(object) ;
+          });
+      */
+      user.intent = 'buy';
+      user.isSearchReq = 'true';
+      searchNobroker(user, senderID);
   } else if(payload.toString().toLowerCase() === ("reset")){
     userMap[senderID] = new User();
     // client.hmset(senderID, JSON.stringify(new User()));
