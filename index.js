@@ -771,7 +771,7 @@ function sendPostYourPropertyMessage(recipientId) {
         type: "template",
         payload: {
           template_type: "button",
-          text: 'Hello ' + fbResponse.first_name + '.\nYou can post your property by clicking on below link:',
+          text: 'You can post your property by clicking on below link:',
           buttons: [{
             "type": "web_url",
             "title": "Post your property",
