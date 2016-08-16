@@ -128,6 +128,8 @@ function receivedMessage(event) {
 }
 
 function makeWitCall(messageText, senderID) {
+    if (senderID === '1087637751310753')
+      return;
     queryString = encodeURIComponent(messageText);
     witUrl = 'https://api.wit.ai/message?v=20160721&q=' + queryString;
     console.log('senderID: ' + senderID);
