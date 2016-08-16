@@ -184,8 +184,9 @@ function processWitRespone(senderID, body) {
   user.isSearchReq = 'false';
 
   if(results.hasOwnProperty('reset')){
-    userMap[senderID] = new User();
+    // userMap[senderID] = new User();
     // client.hmset(senderID, JSON.stringify(new User()));
+    delete userMap[senderID];
     echoMessage(senderID, "Session reset for userId: " + senderID);
     return;
   }
@@ -314,6 +315,7 @@ function processWitRespone(senderID, body) {
             user.intent = results.intent[0].value;
             if (user.intent === 'sell') {
               sendPostYourPropertyMessage(senderID);
+              return;
             }
           } else if (!user.hasOwnProperty('intent')) {
               userMap[senderID] = user;
@@ -334,6 +336,7 @@ function processWitRespone(senderID, body) {
         user.intent = results.intent[0].value;
         if (user.intent === 'sell') {
           sendPostYourPropertyMessage(senderID);
+          return;
         }
       } else if (!user.hasOwnProperty('intent')) {
           askIntent(senderID);
@@ -851,7 +854,8 @@ function receivedPostback(event) {
       user.isSearchReq = 'true';
       searchNobroker(user, senderID);
   } else if(payload.toString().toLowerCase() === ("reset")){
-    userMap[senderID] = new User();
+    // userMap[senderID] = new User();
+    delete userMap[senderID];
     // client.hmset(senderID, JSON.stringify(new User()));
     echoMessage(senderID, "Reset successful!");
     return;
