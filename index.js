@@ -794,7 +794,7 @@ function sendTypingAction(recipientId, action) {
     "sender_action": action
   };  
 
-  //callSendAPI(messageData);
+  callSendAPI(messageData);
 }
 
 function receivedPostback(event) {
