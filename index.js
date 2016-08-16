@@ -80,7 +80,7 @@ function receivedMessage(event) {
 
   // console.log("Received message for user %d and page %d at %d", 
   // senderID, recipientID, timeOfMessage);
-  sendTypingAction(senderID, "mark_seen");
+  // sendTypingAction(senderID, "mark_seen");
   sendTypingAction(senderID, "typing_on");
 
   if (Object.keys(userMap).length > 100) {
@@ -126,7 +126,7 @@ function receivedMessage(event) {
     makeWitCall(messageText, senderID);
 
   } else if (messageAttachments) {
-    echoMessage(senderID, "Message with attachment received");
+    // echoMessage(senderID, "");
   }
 }
 
