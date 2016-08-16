@@ -195,16 +195,19 @@ function processWitRespone(senderID, body) {
   if(results.hasOwnProperty('no_of_bedrooms')) {
     user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
     user.isSearchReq = 'true';
+    user.bhkAsked = 'true';
   }
 
   if(results.hasOwnProperty('maxrent')) {
     user.maxrent = parseInt(results.maxrent[0].value) * 1.2;
     user.isSearchReq = 'true';
+    user.rentAsked = 'true';
   }
 
   if(results.hasOwnProperty('minrent')) {
     user.minrent = parseInt(results.minrent[0].value) * 0.8;
     user.isSearchReq = 'true';
+    user.rentAsked = 'true';
   }
 
   if(results.hasOwnProperty('swimmingpool')) {
@@ -489,9 +492,9 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
       if (user.asked === 'false' && !user.rentAsked) {
         user.rentAsked = 'true';
         user.asked = 'true';
-        this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"); }, 8000);
+        this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"); }, 4000);
       }
-      userMap[senderID] = user;
+      userMap[senderID] = user;  
       //  client.hmset(senderID, JSON.stringify(user));
       //  client.expire(senderID, 900);
   } else {
