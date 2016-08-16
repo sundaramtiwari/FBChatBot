@@ -312,6 +312,9 @@ function processWitRespone(senderID, body) {
 
           if(results.hasOwnProperty('intent')) {
             user.intent = results.intent[0].value;
+            if (user.intent === 'sell') {
+              sendPostYourPropertyMessage(senderID);
+            }
           } else if (!user.hasOwnProperty('intent')) {
               userMap[senderID] = user;
               //  client.hmset(senderID, JSON.stringify(user));
@@ -594,33 +597,33 @@ function sendGenericMessage(recipientId) {
             }else{
                 fbResponse = JSON.parse(body);
                 var messageData = {
-              recipient: {
-                  id: recipientId
-              },
-              message:{
-                attachment: {
-                  type: "template",
-                  payload: {
-                    template_type: "button",
-                    text: 'Hello ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \n flats in Powai Mumbai',
-                    buttons: [{
-                        "type": "web_url",
-                        "url": "http://www.nobroker.in/tenant/plans",
-                        "title": "Take me to Nobroker"
-                        }, {
-                        "type": "postback",
-                        "title": "Nobroker Home Plans",
-                        "payload": "plan"
-                      }, {
-                        "type": "web_url",
-                        "title": "Post your property",
-                        "url": "http://www.nobroker.in/list-your-property-for-rent-sale"
-                      }
-                    ]
+                  recipient: {
+                      id: recipientId
+                  },
+                  message:{
+                    attachment: {
+                      type: "template",
+                      payload: {
+                        template_type: "button",
+                        text: 'Hello ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \n flats in Powai Mumbai',
+                        buttons: [{
+                            "type": "web_url",
+                            "url": "http://www.nobroker.in/tenant/plans",
+                            "title": "Take me to Nobroker"
+                            }, {
+                            "type": "postback",
+                            "title": "Nobroker Home Plans",
+                            "payload": "plan"
+                          }, {
+                            "type": "web_url",
+                            "title": "Post your property",
+                            "url": "http://www.nobroker.in/list-your-property-for-rent-sale"
+                          }
+                        ]
+                    }
+                  }
                 }
               }
-            }
-          }
         sendTypingAction(recipientId, "typing_off");  
         callSendAPI(messageData);
             }
@@ -752,6 +755,30 @@ function sendPlansMessage(recipientId) {
     }
   };  
 
+  callSendAPI(messageData);
+}
+
+function sendPostYourPropertyMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message:{
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: 'Hello ' + fbResponse.first_name + '.\nYou can post your property by clicking on below link:',
+          buttons: [{
+            "type": "web_url",
+            "title": "Post your property",
+            "url": "http://www.nobroker.in/list-your-property-for-rent-sale"
+          }]
+        }
+      }
+    }
+  }
+  sendTypingAction(recipientId, "typing_off");  
   callSendAPI(messageData);
 }
 
