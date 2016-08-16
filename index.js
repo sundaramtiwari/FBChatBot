@@ -115,6 +115,11 @@ function receivedMessage(event) {
       return;
     }
 
+    if (messageText.indexOf("thnk") > -1) {
+      echoMessage(senderID, "Happy to help!");
+      return;
+    }
+
     makeWitCall(messageText, senderID);
 
   } else if (messageAttachments) {
@@ -168,6 +173,9 @@ function processWitRespone(senderID, body) {
     echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
   }
 
+  user.asked = 'false';
+  user.isSearchReq = 'false';
+
   if(results.hasOwnProperty('reset')){
     userMap[senderID] = new User();
     // client.hmset(senderID, JSON.stringify(new User()));
@@ -175,7 +183,85 @@ function processWitRespone(senderID, body) {
     return;
   }
 
-  user.asked = 'false';
+  if(results.hasOwnProperty('greeting')) {
+      sendGenericMessage(senderID);
+      return;
+  }
+
+  if(results.hasOwnProperty('intent')){
+      user.intent = results.intent[0].value;
+  } else if (!user.hasOwnProperty('intent')) {
+      askIntent(senderID);
+      userMap[senderID] = user;
+      //  client.hmset(senderID, JSON.stringify(user));
+      //  client.expire(senderID, 900);
+      return;
+  }
+
+  if(results.hasOwnProperty('no_of_bedrooms')) {
+    user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
+    user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('maxrent')) {
+    user.maxrent = parseInt(results.maxrent[0].value) * 1.2;
+    user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('minrent')) {
+    user.minrent = parseInt(results.minrent[0].value) * 0.8;
+    user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('swimmingpool')) {
+    user.swimmingPool = 1;
+    user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('gym')) {
+    user.gym = 1;
+    user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('lift')) {
+    user.lift = 1;
+    user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('parking')){
+      map['parking'] = results.parking[0].value;
+      if (map['parking'].toLowerCase().indexOf("car") > -1) {
+          map['parking'] = 'car';
+      }
+      user.parking = map['parking'];
+      user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('leaseType')){
+    map['leaseType'] = results.leaseType[0].value;
+    if (map['leaseType'].toLowerCase().indexOf("family") > -1) {
+      map['leaseType'] = 'family';
+    }
+    user.leaseType = map['leaseType'];
+    user.isSearchReq = 'true';
+  }
+
+  if(results.hasOwnProperty('furnishing')){
+    map['furnishing'] = results.furnishing[0].value;
+    if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
+      user.furnishing = 'NOT_FURNISHED';
+    } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
+        user.furnishing = 'SEMI_FURNISHED';
+    } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
+        user.furnishing = 'FULLY_FURNISHED';
+    }
+    user.isSearchReq = 'true';
+  }
+          
+  userMap[senderID] = user;
+  //  client.hmset(senderID, JSON.stringify(user));
+  //  client.expire(senderID, 900);
+
   if(results.hasOwnProperty('location')) {
     map['location'] = results.location[0].value;
     console.log('User Loc by text: ' + map['location']);
@@ -228,15 +314,8 @@ function processWitRespone(senderID, body) {
       }
     });
 
-  } else if (user.hasOwnProperty('location')) {
-    if(results.hasOwnProperty('greeting')){
-      sendGenericMessage(senderID);
-      return;
-    }
+  } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
     searchNobroker(map, userMap, results, user, senderID);
-  } else if(results.hasOwnProperty('greeting')){
-      sendGenericMessage(senderID);
-      return;
   } else {
       echoMessage(senderID, "Please type the location you are looking for rent/buy property");
       return;
@@ -244,66 +323,7 @@ function processWitRespone(senderID, body) {
 }
 
 function  searchNobroker(map, userMap, results, user, senderID) {
-  if(results.hasOwnProperty('intent')){
-      user.intent = results.intent[0].value;
-  } else if (!user.hasOwnProperty('intent')) {
-      askIntent(senderID);
-      userMap[senderID] = user;
-      //  client.hmset(senderID, JSON.stringify(user));
-      //  client.expire(senderID, 900);
-      return;
-  }
-
   echoMessage(senderID, "Just a sec, I’m looking that up...");
-
-  if(results.hasOwnProperty('no_of_bedrooms'))
-    user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
-
-  if(results.hasOwnProperty('maxrent'))
-    user.maxrent = parseInt(results.maxrent[0].value) * 1.2;
-
-  if(results.hasOwnProperty('minrent'))
-    user.minrent = parseInt(results.minrent[0].value) * 0.8;
-
-  if(results.hasOwnProperty('swimmingpool'))
-    user.swimmingPool = 1;
-
-  if(results.hasOwnProperty('gym'))
-    user.gym = 1;
-
-  if(results.hasOwnProperty('lift'))
-    user.lift = 1;
-
-  if(results.hasOwnProperty('parking')){
-      map['parking'] = results.parking[0].value;
-      if (map['parking'].toLowerCase().indexOf("car") > -1) {
-          map['parking'] = 'car';
-      }
-      user.parking = map['parking'];
-  }
-
-  if(results.hasOwnProperty('leaseType')){
-    map['leaseType'] = results.leaseType[0].value;
-    if (map['leaseType'].toLowerCase().indexOf("family") > -1) {
-      map['leaseType'] = 'family';
-    }
-    user.leaseType = map['leaseType'];
-  }
-
-  if(results.hasOwnProperty('furnishing')){
-    map['furnishing'] = results.furnishing[0].value;
-    if (map['furnishing'].toLowerCase().indexOf("un") > -1) {
-      user.furnishing = 'NOT_FURNISHED';
-    } else if (map['furnishing'].toLowerCase().indexOf("semi") > -1) {
-        user.furnishing = 'SEMI_FURNISHED';
-    } else if (map['furnishing'].toLowerCase().indexOf("ful") > -1) {
-        user.furnishing = 'FULLY_FURNISHED';
-    }
-  }
-          
-  userMap[senderID] = user;
-  //  client.hmset(senderID, JSON.stringify(user));
-  //  client.expire(senderID, 900);
           
   var searchURL;
   if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
@@ -485,39 +505,39 @@ function sendPropertiesMessage(recipientId, propertyArray) {
             subtitle: "Rent: " + propertyArray[1].rent + ".",
             item_url: propertyArray[1].shortUrl,
             image_url: propertyArray[1].image,
-            /*buttons: [{
+            buttons: [{
               type: "web_url",
               url: propertyArray[1].shortUrl,
               title: "View Property"
-            }]*/
+            }]
           },
           {
             title: propertyArray[2].bhk + " BHK in " + propertyArray[2].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[2].rent + ".",
             item_url: propertyArray[2].shortUrl,
             image_url: propertyArray[2].image,
-            /*buttons: [{
+            buttons: [{
               type: "web_url",
               url: propertyArray[2].shortUrl,
               title: "View Property"
-            }]*/
+            }]
           },
           {
             title: propertyArray[3].bhk + " BHK in " + propertyArray[3].locality.split(',')[0],
             subtitle: "Rent: " + propertyArray[3].rent + ".",
             item_url: propertyArray[3].shortUrl,
             image_url: propertyArray[3].image,
-            /*buttons: [{
+            buttons: [{
               type: "web_url",
               url: propertyArray[3].shortUrl,
               title: "View Property"
-            }]*/
+            }]
           },
           {
-            title: 'Team Nobroker',
+            title: 'See More',
             // subtitle: propertyArray[3].title + ". Rent: " + propertyArray[3].rent + ". \nDeposit: " + propertyArray[3].deposit,
-            item_url: propertyArray[3].shortUrl,
-            image_url: "https://e27.co/wp-content/uploads/2016/02/NoBroker_1.jpeg",
+            // item_url: propertyArray[3].shortUrl,
+            image_url: "https://lh3.googleusercontent.com/3V4ulw7nvRC0ZyteV2vkaJDqyiq-PHNcijWL9CaX75Aqrctfws5pD3I6FQyhsZkmJg=w300",
             buttons: [{
               type: "web_url",
               url: propertyArray[0].url,
