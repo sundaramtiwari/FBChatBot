@@ -256,15 +256,6 @@ function processWitRespone(senderID, body) {
     map['location'] = results.location[0].value;
     console.log('User Loc by text: ' + map['location']);
 
-    if(results.hasOwnProperty('intent')) {
-      user.intent = results.intent[0].value;
-    } else if (!user.hasOwnProperty('intent')) {
-        askIntent(senderID);
-        userMap[senderID] = user;
-        //  client.hmset(senderID, JSON.stringify(user));
-        //  client.expire(senderID, 900);
-        return;
-    }
     googleQueryString = encodeURIComponent(map['location']);
 
     googleUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyCwy2ETEJXPynpNXJggwjzsHxFcG3Il34o&input='
@@ -294,12 +285,12 @@ function processWitRespone(senderID, body) {
 
           userMap[senderID] = new User();
           user = userMap[senderID];
+          /*  client.hmset(senderID, JSON.stringify(new User()));
+              client.hgetall(senderID, function(err, object) {
+                user = JSON.parse(object) ;
+              });
+          */
 
-      /*  client.hmset(senderID, JSON.stringify(new User()));
-          client.hgetall(senderID, function(err, object) {
-            user = JSON.parse(object) ;
-          });
-      */
           if (existing_intent) {
             user.intent = existing_intent;
           }
@@ -309,6 +300,15 @@ function processWitRespone(senderID, body) {
           //  client.hmset(senderID, JSON.stringify(user));
           //  client.expire(senderID, 900);
 
+          if(results.hasOwnProperty('intent')) {
+            user.intent = results.intent[0].value;
+          } else if (!user.hasOwnProperty('intent')) {
+              userMap[senderID] = user;
+              //  client.hmset(senderID, JSON.stringify(user));
+              //  client.expire(senderID, 900);
+              askIntent(senderID);
+              return;
+          }
           searchNobroker(user, senderID);
         } else {
           echoMessage(senderID, "Sorry, Unable to identify your location. Please try again.");
@@ -338,7 +338,7 @@ function  searchNobroker(user, senderID) {
     echoMessage(senderID, "Please type the location you are looking for rent/buy property");
     return;
   }
-  
+
   echoMessage(senderID, "Just a sec, I’m looking that up...");
   var searchURL;
   if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
