@@ -128,7 +128,7 @@ function receivedMessage(event) {
 }
 
 function makeWitCall(messageText, senderID) {
-    if (senderID === '1087637751310753')
+    if (senderID === '794951570520699')
       return;
     queryString = encodeURIComponent(messageText);
     witUrl = 'https://api.wit.ai/message?v=20160721&q=' + queryString;
@@ -665,6 +665,8 @@ function echoMessage(recipientId, messageText) {
 }
 
 function callSendAPI(messageData) {
+  if (messageData && messageData.recipient.id === "794951570520699")
+    return;
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
