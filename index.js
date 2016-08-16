@@ -89,6 +89,7 @@ function receivedMessage(event) {
   if (!userMap.hasOwnProperty(senderID)) {
     console.log('Adding new user to session: ' + senderID);
     userMap[senderID] = new User();
+    sendGenericMessage(senderID);
   } else {
     console.log('User already in session: ' + userMap[senderID]);
   }
