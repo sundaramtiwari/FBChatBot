@@ -118,7 +118,7 @@ function receivedMessage(event) {
       return;
     }
 
-    if (messageText.toLowerCase().indexOf("thnk") > -1 || messageText.toLowerCase().indexOf("thank") > -1) {
+    if (messageText.toLowerCase().indexOf("thnk") > -1 || messageText.toLowerCase().indexOf("thank") > -1 && messageText.length < 20) {
       echoMessage(senderID, "Happy to help!");
       return;
     }
