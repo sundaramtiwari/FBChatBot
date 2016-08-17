@@ -475,13 +475,10 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
         } else {
           continue;
         }
-        prop.shortUrl = data[i].shortUrl;
-        prop.detailUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
+        // prop.shortUrl = data[i].shortUrl;
+        prop.shortUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
         if (!prop.shortUrl || prop.shortUrl === 'undefined' || prop.shortUrl === null) {
-          if (prop.detailUrl && prop.detailUrl != 'undefined' && prop.detailUrl != null) {
-            prop.shortUrl = prop.detailUrl;
-          } else 
-              continue;    
+          continue;
         }
         if (count == 0) {
           if (user.intent.toString().indexOf('rent') > -1) {
