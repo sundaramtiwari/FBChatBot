@@ -446,7 +446,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
 
   if (data.length === 0) {
     echoMessage(senderID, 'We are unable to find premium properties matching your requirements');
-    echoMessage(senderID, 'Visit www.nobroker.in for detailed resutls.');
+    echoMessage(senderID, 'Visit www.nobroker.in for detailed results.');
     // setTimeout(sendPlansMessage(senderID), 1500);
     return 0;
   }
@@ -501,19 +501,21 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
         user.bhkAsked = 'true';
         user.asked = 'true';
         this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bhk / bedrooms?"); }, 6000);
+        this.setTimeout(function() { echoMessage(senderID, "You can always change your search location. Just send me the new search location."); }, 9000);
       }
 
       if (user.asked === 'false' && !user.rentAsked) {
         user.rentAsked = 'true';
         user.asked = 'true';
         this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 15000 - 20000?"); }, 6000);
+        this.setTimeout(function() { echoMessage(senderID, "You can always change your search location. Just send me the new search location."); }, 9000);
       }
       userMap[senderID] = user;  
       //  client.hmset(senderID, JSON.stringify(user));
       //  client.expire(senderID, 900);
   } else {
       echoMessage(senderID, 'We are unable to find premium properties matching your requirements');
-    echoMessage(senderID, 'Visit www.nobroker.in for detailed resutls.');
+    echoMessage(senderID, 'Visit www.nobroker.in for detailed results.');
   }
 }
 
