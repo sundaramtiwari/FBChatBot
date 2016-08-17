@@ -810,28 +810,30 @@ function sendTypingAction(recipientId, action) {
 }
 
 function sendQuickReply(recipientId, text, title1, payload1, title2, payload2, title3, payload3) {
-  "recipient":{
-    "id": recipientId
-  },
-  "message":{
-    "text": text,
-    "quick_replies":[
-      {
-        "content_type":"text",
-        "title":title1,
-        "payload":payload1
-      },
-      {
-        "content_type":"text",
-        "title":title2,
-        "payload":payload2
-      },
-      {
-        "content_type":"text",
-        "title":title3,
-        "payload":payload3
-      }
-    ]
+  var messageData = {
+    "recipient":{
+      "id": recipientId
+    },
+    "message":{
+      "text": text,
+      "quick_replies":[
+        {
+          "content_type":"text",
+          "title":title1,
+          "payload":payload1
+        },
+        {
+          "content_type":"text",
+          "title":title2,
+          "payload":payload2
+        },
+        {
+          "content_type":"text",
+          "title":title3,
+          "payload":payload3
+        }
+      ]
+    }
   }
 }
 
