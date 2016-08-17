@@ -68,7 +68,6 @@ var PAGE_ACCESS_TOKEN = "EAAEHFebMi9sBAAdNZAMrgsmKVrGm2rVu7oPzlkr2cb2McHYz0ccENd
 
 function User(){
 }
-
 var userMap = {};
 var genericMsgSent = 'false';
 
@@ -93,6 +92,7 @@ function receivedMessage(event) {
     sendGenericMessage(senderID);
     genericMsgSent = 'true';
     echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');
+
   } else {
     console.log('User already in session: ' + userMap[senderID]);
   }
@@ -347,7 +347,9 @@ function processWitRespone(senderID, body) {
       }
     searchNobroker(user, senderID);
   } else {
-      echoMessage(senderID, "Please type the location you are looking for rent/buy property");
+      if (genericMsgSent === 'false') {
+        echoMessage(senderID, "Please type the location you are looking for rent/buy property");
+      }
       return;
   }
 }
