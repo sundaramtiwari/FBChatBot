@@ -445,7 +445,8 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   }
 
   if (data.length === 0) {
-    echoMessage(senderID, 'Sorry! We are unable to find premium properties matching your requirement. Please visit www.nobroker.in.');
+    echoMessage(senderID, 'We are unable to find premium properties matching your requirements');
+    echoMessage(senderID, 'Visit www.nobroker.in for detailed resutls.');
     // setTimeout(sendPlansMessage(senderID), 1500);
     return 0;
   }
@@ -511,7 +512,8 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
       //  client.hmset(senderID, JSON.stringify(user));
       //  client.expire(senderID, 900);
   } else {
-      echoMessage(senderID, 'We are unable to find premium properties matching your requirement. Please visit www.nobroker.in for detailed results.');
+      echoMessage(senderID, 'We are unable to find premium properties matching your requirements');
+    echoMessage(senderID, 'Visit www.nobroker.in for detailed resutls.');
   }
 }
 
