@@ -91,7 +91,7 @@ function receivedMessage(event) {
     userMap[senderID] = new User();
     sendGenericMessage(senderID);
     genericMsgSent = 'true';
-    echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');
+    this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai'); }, 4000);
 
   } else {
     console.log('User already in session: ' + userMap[senderID]);
@@ -150,7 +150,7 @@ function makeWitCall(messageText, senderID) {
     request(options, function(error, response, body) {
       if(error) {
         echoMessage(senderID, "Oops! AI Engine failed to understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-        setTimeout(sendPlansMessage(senderID), 3000);
+        this.setTimeout(function() { sendPlansMessage(senderID); }, 3000);
       }
       else {
           processWitRespone(senderID, body);
@@ -284,7 +284,7 @@ function processWitRespone(senderID, body) {
       if(error) {
         console.log(error);
         echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-        setTimeout(sendPlansMessage(senderID), 3000);
+        this.setTimeout(function() { sendPlansMessage(senderID); }, 3000);
       }
       else {
         var googleResponse = JSON.parse(body);
