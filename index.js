@@ -92,6 +92,7 @@ function receivedMessage(event) {
     userMap[senderID] = new User();
     sendGenericMessage(senderID);
     genericMsgSent = 'true';
+    echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');
   } else {
     console.log('User already in session: ' + userMap[senderID]);
   }
@@ -193,6 +194,7 @@ function processWitRespone(senderID, body) {
 
   if(results.hasOwnProperty('greeting') && genericMsgSent === 'false') {
       sendGenericMessage(senderID);
+      echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');
       return;
   }
 
@@ -616,7 +618,7 @@ function sendGenericMessage(recipientId) {
                       type: "template",
                       payload: {
                         template_type: "button",
-                        text: 'Hello ' + fbResponse.first_name + '.\nI am an AI-based assistant for Nobroker. Ask me things like: \n flats in Powai Mumbai',
+                        text: 'Hello ' + fbResponse.first_name + '.\nI am an AI-assistant from NoBroker to help yo u save the brokerage.',
                         buttons: [{
                             "type": "web_url",
                             "url": "http://www.nobroker.in/tenant/plans",
