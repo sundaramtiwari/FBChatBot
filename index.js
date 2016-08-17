@@ -506,7 +506,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
         this.setTimeout(function() { sendQuickReply(senderID, "Are you looking for any specific number of bhk / bedrooms?",
           '1 BHK', 'BHK1', '2 BHK', 'BHK2', '3 BHK', 'BHK3'); }, 6000);
         // this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bhk / bedrooms?"); }, 6000);
-        this.setTimeout(function() { echoMessage(senderID, "You can always change search location. Just type-in new location."); }, 8000);
+        // this.setTimeout(function() { echoMessage(senderID, "You can always change search location. Just type-in new location."); }, 8000);
       }
 
       if (user.asked === 'false' && !user.rentAsked) {
