@@ -810,7 +810,6 @@ function sendTypingAction(recipientId, action) {
 }
 
 function sendQuickReply(recipientId, text, title1, payload1, title2, payload2, title3, payload3) {
-  console.log('Inside sendQuickReply')
   var messageData = {
     "recipient":{
       "id": recipientId
@@ -836,6 +835,8 @@ function sendQuickReply(recipientId, text, title1, payload1, title2, payload2, t
       ]
     }
   }
+
+  callSendAPI(messageData);
 }
 
 function receivedPostback(event) {
