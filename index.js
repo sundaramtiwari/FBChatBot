@@ -356,7 +356,7 @@ function  searchNobroker(user, senderID) {
     return;
   }
 
-  echoMessage(senderID, "Just a sec, I’m looking that up...");
+  echoMessage(senderID, "Hang on, looking that up...");
   var searchURL;
   if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
     searchURL = 'http://www.nobroker.in/api/v1/property/sale/filter/region/';
