@@ -502,15 +502,18 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
       if (user.asked === 'false' && !user.bhkAsked) {
         user.bhkAsked = 'true';
         user.asked = 'true';
-        this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bhk / bedrooms?"); }, 6000);
-        this.setTimeout(function() { echoMessage(senderID, "You can always change your search location. Just send me the new search location."); }, 9000);
+        
+        this.setTimeout(function() { sendQuickReply(senderID, "Are you looking for any specific number of bhk / bedrooms?",
+          '1 BHK', 'BHK1', '2 BHK', 'BHK2', '3 BHK', 'BHK3'); }, 6000);
+        // this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bhk / bedrooms?"); }, 6000);
+        this.setTimeout(function() { echoMessage(senderID, "You can always change search location. Just type-in new location."); }, 8000);
       }
 
       if (user.asked === 'false' && !user.rentAsked) {
         user.rentAsked = 'true';
         user.asked = 'true';
         this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 15000 - 20000?"); }, 6000);
-        this.setTimeout(function() { echoMessage(senderID, "You can always change your search location. Just send me the new search location."); }, 9000);
+        this.setTimeout(function() { echoMessage(senderID, "You can always change search location. Just type-in new location."); }, 8000);
       }
       userMap[senderID] = user;  
       //  client.hmset(senderID, JSON.stringify(user));
@@ -806,6 +809,32 @@ function sendTypingAction(recipientId, action) {
   callSendAPI(messageData);
 }
 
+function sendQuickReply(recipientId, text, title1, payload1, title2, payload2, title3, payload3) {
+  "recipient":{
+    "id": recipientId
+  },
+  "message":{
+    "text": text,
+    "quick_replies":[
+      {
+        "content_type":"text",
+        "title":title1,
+        "payload":payload1
+      },
+      {
+        "content_type":"text",
+        "title":title2,
+        "payload":payload2
+      },
+      {
+        "content_type":"text",
+        "title":title3,
+        "payload":payload3
+      }
+    ]
+  }
+}
+
 function receivedPostback(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -865,6 +894,22 @@ function receivedPostback(event) {
     delete userMap[senderID];
     // client.hmset(senderID, JSON.stringify(new User()));
     echoMessage(senderID, "Reset successful!");
+    return;
+  } else if(payload.toString().toLowerCase().length === 4 && payload.toString().indexOf('BHK') > -1){
+    if (!userMap.hasOwnProperty(senderID)) {
+        console.error('Adding new user to session: ' + senderID);
+        userMap[senderID] = new User();
+        //  client.hmset(senderID, JSON.stringify(user));
+        //  client.expire(senderID, 900);
+    }
+    var user = userMap[senderID];
+    /*  client.hgetall(senderID, function(err, object) {
+          user = JSON.parse(object) ;
+          });
+    */
+    user.bhk = payload.toString().charAt(3);
+    user.isSearchReq = 'true';
+    searchNobroker(user, senderID);
     return;
   } else {
     echoMessage(senderID, "Sorry, didnt understand.");
