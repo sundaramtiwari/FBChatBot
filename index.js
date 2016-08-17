@@ -440,7 +440,7 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
   var data = jsonResponse.data;
 
   if (!data) {
-    echoMessage(senderID, "Oops! something went wrong with your request. Try again sometime later");
+    echoMessage(senderID, "Oops! something went wrong with your request. Please try sometime later");
     return 0;
   }
 
@@ -477,6 +477,12 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
         }
         prop.shortUrl = data[i].shortUrl;
         prop.detailUrl = 'http://www.nobroker.in/' + data[i].detailUrl;
+        if (!prop.shortUrl || prop.shortUrl === 'undefined' || prop.shortUrl === null) {
+          if (prop.detailUrl && prop.detailUrl != 'undefined' && prop.detailUrl != null) {
+            prop.shortUrl = prop.detailUrl;
+          } else 
+              continue;    
+        }
         if (count == 0) {
           if (user.intent.toString().indexOf('rent') > -1) {
             prop.url = 'http://www.nobroker.in/property/rent/' + data[i].city + '/' + data[i].nbLocality + '?nbPlace=' + data[i].localityId;
@@ -496,19 +502,19 @@ function sendPropertyResponse(jsonResponse, senderID, user) {
       if (user.asked === 'false' && !user.bhkAsked) {
         user.bhkAsked = 'true';
         user.asked = 'true';
-        this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bedrooms/ bhk?"); }, 4000);
+        this.setTimeout(function() { echoMessage(senderID, "Are you looking for any specific number of bhk / bedrooms?"); }, 6000);
       }
 
       if (user.asked === 'false' && !user.rentAsked) {
         user.rentAsked = 'true';
         user.asked = 'true';
-        this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 10000 - 15000?"); }, 4000);
+        this.setTimeout(function() { echoMessage(senderID, "Are you looking in specific price range? Like 15000 - 20000?"); }, 6000);
       }
       userMap[senderID] = user;  
       //  client.hmset(senderID, JSON.stringify(user));
       //  client.expire(senderID, 900);
   } else {
-      echoMessage(senderID, 'Sorry! We are unable to find premium properties matching your requirement. Please visit www.nobroker.in.');
+      echoMessage(senderID, 'We are unable to find premium properties matching your requirement. Please visit www.nobroker.in for detailed results.');
   }
 }
 
