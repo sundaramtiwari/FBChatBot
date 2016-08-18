@@ -155,22 +155,26 @@ function makeWitCall(messageText, senderID) {
       else {
           var jsonResponse = JSON.parse(body);
           var results = jsonResponse.entities;
-
+          console.log('wit results received');
           if (!results || typeof results === 'undefined') {
             //this.setTimeout(function() { echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly..."); }, 4000);
+            console.log('No results found');
             echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
             return;
           } else if(results.hasOwnProperty('reset')){
               // userMap[senderID] = new User();
               // client.hmset(senderID, JSON.stringify(new User()));
+              console.log('reset called');
               delete userMap[senderID];
               echoMessage(senderID, "Session reset for userId: " + senderID);
               return;
           } else if(results.hasOwnProperty('greeting') && genericMsgSent === 'false') {
+              console.log('greeting called');
               sendGenericMessage(senderID);
               this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');}, 2000);
               return;
           } else {
+              console.log('processing wit response..');
               processWitRespone(senderID, results);
           }
       }
