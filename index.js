@@ -91,7 +91,7 @@ function receivedMessage(event) {
     userMap[senderID] = new User();
     sendGenericMessage(senderID);
     genericMsgSent = 'true';
-    this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai'); }, 2000);
+    this.setTimeout(function() { echoMessage(senderID, "Please type the location you are looking for rent/buy property: flats in powai mumbai"); }, 2000);
 
   } else {
     console.log('User already in session: ' + userMap[senderID]);
@@ -157,7 +157,7 @@ function makeWitCall(messageText, senderID) {
           var results = jsonResponse.entities;
 
           if (!results || typeof results === 'undefined') {
-            this.setTimeout(function() { echoMessage(senderID, 'Thanks for contacting. One of our executives will get in touch with you shortly...');}, 4000);
+            this.setTimeout(function() { echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly..."); }, 4000);
             return;
           } else if(results.hasOwnProperty('reset')){
               // userMap[senderID] = new User();
