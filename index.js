@@ -625,7 +625,7 @@ function sendGenericMessage(recipientId) {
                       type: "template",
                       payload: {
                         template_type: "button",
-                        text: 'Hello ' + fbResponse.first_name + '.\nI am an AI-assistant from NoBroker to help yo u save the brokerage. \n Please type the location you are looking for rent/buy property: flats in powai mumbai',
+                        text: 'Hello ' + fbResponse.first_name + '.\nI am NoBroker AI-assistant to help you save brokerage.\nPlease type the location you are looking to rent/buy property.',
                         buttons: [{
                             "type": "web_url",
                             "url": "http://www.nobroker.in/tenant/plans",
