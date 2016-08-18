@@ -157,7 +157,8 @@ function makeWitCall(messageText, senderID) {
           var results = jsonResponse.entities;
 
           if (!results || typeof results === 'undefined') {
-            this.setTimeout(function() { echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly..."); }, 4000);
+            //this.setTimeout(function() { echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly..."); }, 4000);
+            echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
             return;
           } else if(results.hasOwnProperty('reset')){
               // userMap[senderID] = new User();
