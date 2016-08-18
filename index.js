@@ -153,13 +153,31 @@ function makeWitCall(messageText, senderID) {
         this.setTimeout(function() { sendPlansMessage(senderID); }, 3000);
       }
       else {
-          processWitRespone(senderID, body);
+          var jsonResponse = JSON.parse(body);
+          var results = jsonResponse.entities;
+
+          if (!results || typeof results === 'undefined') {
+            echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
+            return;
+          } else if(results.hasOwnProperty('reset')){
+              // userMap[senderID] = new User();
+              // client.hmset(senderID, JSON.stringify(new User()));
+              delete userMap[senderID];
+              echoMessage(senderID, "Session reset for userId: " + senderID);
+              return;
+          } else if(results.hasOwnProperty('greeting') && genericMsgSent === 'false') {
+              sendGenericMessage(senderID);
+              echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');
+              return;
+          } else {
+              processWitRespone(senderID, results);
+          }
       }
-        return;
+      return;
     });
 }
 
-function processWitRespone(senderID, body) {
+function processWitRespone(senderID, results) {
   var map = {};
   map['intent'] = 0;
   map['location'] = 0;
@@ -168,35 +186,14 @@ function processWitRespone(senderID, body) {
   map['maxrent'] = 0;
   map['swimmingPool'] = 0;
 
-  var jsonResponse = JSON.parse(body);
-  var results = jsonResponse.entities;
   var user = userMap[senderID];
 
   /* client.hgetall(senderID, function(err, object) {
     user = JSON.parse(object) ;
   }); */
 
-  if (!results || typeof results === 'undefined') {
-    echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
-    return;
-  }
-
   user.asked = 'false';
   user.isSearchReq = 'false';
-
-  if(results.hasOwnProperty('reset')){
-    // userMap[senderID] = new User();
-    // client.hmset(senderID, JSON.stringify(new User()));
-    delete userMap[senderID];
-    echoMessage(senderID, "Session reset for userId: " + senderID);
-    return;
-  }
-
-  if(results.hasOwnProperty('greeting') && genericMsgSent === 'false') {
-      sendGenericMessage(senderID);
-      echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');
-      return;
-  }
 
   if(results.hasOwnProperty('no_of_bedrooms')) {
     user.bhk = results.no_of_bedrooms[0].value.match(/\d+/)[0];
