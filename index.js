@@ -349,9 +349,7 @@ function processWitRespone(senderID, results) {
       }
     searchNobroker(user, senderID);
   } else {
-      if (genericMsgSent === 'false') {
-        echoMessage(senderID, "Please type the location you are looking for rent/buy property");
-      }
+      echoMessage(senderID, "Sorry, unable to identify your location. Please try again.");
       return;
   }
 }
