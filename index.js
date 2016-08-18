@@ -91,7 +91,7 @@ function receivedMessage(event) {
     userMap[senderID] = new User();
     sendGenericMessage(senderID);
     genericMsgSent = 'true';
-    this.setTimeout(function() { echoMessage(senderID, "Please type the location you are looking for rent/buy property: flats in powai mumbai"); }, 2000);
+    //this.setTimeout(function() { echoMessage(senderID, "Please type the location you are looking for rent/buy property: flats in powai mumbai"); }, 2000);
 
   } else {
     console.log('User already in session: ' + userMap[senderID]);
@@ -171,7 +171,7 @@ function makeWitCall(messageText, senderID) {
           } else if(results.hasOwnProperty('greeting') && genericMsgSent === 'false') {
               console.log('greeting called');
               sendGenericMessage(senderID);
-              this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');}, 2000);
+              // this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');}, 2000);
               return;
           } else {
               console.log('processing wit response..');
@@ -625,7 +625,7 @@ function sendGenericMessage(recipientId) {
                       type: "template",
                       payload: {
                         template_type: "button",
-                        text: 'Hello ' + fbResponse.first_name + '.\nI am an AI-assistant from NoBroker to help yo u save the brokerage.',
+                        text: 'Hello ' + fbResponse.first_name + '.\nI am an AI-assistant from NoBroker to help yo u save the brokerage. \n Please type the location you are looking for rent/buy property: flats in powai mumbai',
                         buttons: [{
                             "type": "web_url",
                             "url": "http://www.nobroker.in/tenant/plans",
