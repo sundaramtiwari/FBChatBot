@@ -155,6 +155,7 @@ function makeWitCall(messageText, senderID) {
           var jsonResponse = JSON.parse(body);
           var results = jsonResponse.entities;
           console.log('wit results received');
+          user.containsGreeting = 'false';
           if (!results || typeof results === 'undefined') {
             //this.setTimeout(function() { echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly..."); }, 4000);
             console.log('No results found');
@@ -170,8 +171,8 @@ function makeWitCall(messageText, senderID) {
           } else if(results.hasOwnProperty('greeting')) {
               console.log('greeting called');
               sendGenericMessage(senderID);
+              user.containsGreeting = 'true';
               // this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');}, 2000);
-              return;
           } else {
               console.log('processing wit response..');
               processWitRespone(senderID, results);
@@ -348,7 +349,7 @@ function processWitRespone(senderID, results) {
           return;
       }
     searchNobroker(user, senderID);
-  } else {
+  } else if (user.hasOwnProperty('containsGreeting') && user.containsGreeting.toString() === 'false'){
       echoMessage(senderID, "Sorry, unable to identify your location. Please try again.");
       return;
   }
