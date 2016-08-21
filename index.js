@@ -352,9 +352,13 @@ function processWitRespone(senderID, results, user) {
           return;
       }
     searchNobroker(user, senderID);
-  } else if (user.hasOwnProperty('containsGreeting') && user.containsGreeting.toString() === 'false'){
-      echoMessage(senderID, "Sorry, unable to identify your location. Please try again.");
-      return;
+  } else if (user.hasOwnProperty('containsGreeting')){
+      if (user.containsGreeting.toString() === 'false') {
+        echoMessage(senderID, "Sorry, unable to identify your location. Please try again.");
+        return;
+      } else {
+        return;
+      }
   } else {
       if(results.hasOwnProperty('intent')) {
         user.intent = results.intent[0].value;
