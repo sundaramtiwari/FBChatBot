@@ -327,11 +327,11 @@ function processWitRespone(senderID, results, user) {
 
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
     if (!user.hasOwnProperty('intent')) {
-      userMap[senderID] = user;
-      //  client.hmset(senderID, JSON.stringify(user));
-      //  client.expire(senderID, 900);
-      askIntent(senderID);
-      return;
+        userMap[senderID] = user;
+        //  client.hmset(senderID, JSON.stringify(user));
+        //  client.expire(senderID, 900);
+        askIntent(senderID);
+        return;
     }
     searchNobroker(user, senderID);
   } else if (user.hasOwnProperty('containsGreeting')){
@@ -342,7 +342,9 @@ function processWitRespone(senderID, results, user) {
       } else if (user.containsGreeting.toString() === 'true'){
         return;
       }
-  } else {
+  } else if (user.hasOwnProperty('isSearchReq') && user.isSearchReq.toString() === 'true') {
+      echoMessage(senderID, "Please type the location you are looking for rent/buy property");
+  }else {
     echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
     // echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
   }
