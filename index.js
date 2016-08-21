@@ -69,7 +69,6 @@ var PAGE_ACCESS_TOKEN = "EAAEHFebMi9sBAAdNZAMrgsmKVrGm2rVu7oPzlkr2cb2McHYz0ccENd
 function User(){
 }
 var userMap = {};
-var genericMsgSent = 'false';
 
 function receivedMessage(event) {
   var senderID = event.sender.id;
@@ -90,7 +89,6 @@ function receivedMessage(event) {
     console.log('Adding new user to session: ' + senderID);
     userMap[senderID] = new User();
     sendGenericMessage(senderID);
-    genericMsgSent = 'true';
     //this.setTimeout(function() { echoMessage(senderID, "Please type the location you are looking for rent/buy property: flats in powai mumbai"); }, 2000);
 
   } else {
@@ -169,7 +167,7 @@ function makeWitCall(messageText, senderID) {
               delete userMap[senderID];
               echoMessage(senderID, "Session reset for userId: " + senderID);
               return;
-          } else if(results.hasOwnProperty('greeting') && genericMsgSent === 'false') {
+          } else if(results.hasOwnProperty('greeting')) {
               console.log('greeting called');
               sendGenericMessage(senderID);
               // this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');}, 2000);
@@ -330,6 +328,7 @@ function processWitRespone(senderID, results) {
           searchNobroker(user, senderID);
         } else {
           echoMessage(senderID, "Sorry, Unable to identify your location. Please try again.");
+          return;
         }
       }
     });
