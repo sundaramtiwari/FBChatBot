@@ -340,7 +340,7 @@ function processWitRespone(senderID, results, user) {
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
       if(results.hasOwnProperty('intent')) {
         user.intent = results.intent[0].value;
-        if (user.intent === 'sell') {
+        if (user.intent === 'sell' || user.intent === 'post') {
           sendPostYourPropertyMessage(senderID);
           return;
         }
