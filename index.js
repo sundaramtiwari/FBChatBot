@@ -180,11 +180,11 @@ function makeWitCall(messageText, senderID) {
               sendGenericMessage(senderID);
               user.containsGreeting = 'true';
               console.log('processing wit response..');
-              processWitRespone(senderID, results);
+              processWitRespone(senderID, results, user);
               // this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');}, 2000);
           } else {
               console.log('processing wit response..');
-              processWitRespone(senderID, results);
+              processWitRespone(senderID, results, user);
           }
       }
       return;
