@@ -155,7 +155,14 @@ function makeWitCall(messageText, senderID) {
           var jsonResponse = JSON.parse(body);
           var results = jsonResponse.entities;
           console.log('wit results received');
-          user.containsGreeting = 'false';
+          
+            var user = userMap[senderID];
+            /* client.hgetall(senderID, function(err, object) {
+              user = JSON.parse(object) ;
+            }); */
+
+            user.containsGreeting = 'false';
+
           if (!results || typeof results === 'undefined') {
             //this.setTimeout(function() { echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly..."); }, 4000);
             console.log('No results found');
@@ -182,7 +189,7 @@ function makeWitCall(messageText, senderID) {
     });
 }
 
-function processWitRespone(senderID, results) {
+function processWitRespone(senderID, results, user) {
   var map = {};
   map['intent'] = 0;
   map['location'] = 0;
@@ -190,12 +197,6 @@ function processWitRespone(senderID, results) {
   map['minrent'] = 0;
   map['maxrent'] = 0;
   map['swimmingPool'] = 0;
-
-  var user = userMap[senderID];
-
-  /* client.hgetall(senderID, function(err, object) {
-    user = JSON.parse(object) ;
-  }); */
 
   user.asked = 'false';
   user.isSearchReq = 'false';
@@ -315,7 +316,7 @@ function processWitRespone(senderID, results) {
 
           if(results.hasOwnProperty('intent')) {
             user.intent = results.intent[0].value;
-            if (user.intent === 'sell') {
+            if (user.intent === 'sell' || user.intent === 'post') {
               sendPostYourPropertyMessage(senderID);
               return;
             }
