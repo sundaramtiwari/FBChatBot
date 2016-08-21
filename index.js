@@ -288,7 +288,7 @@ function processWitRespone(senderID, results, user) {
     request(options, function(error, response, body) {
       if(error) {
         console.log(error);
-        echoMessage(senderID, "Oops! Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
+        echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
         this.setTimeout(function() { sendPlansMessage(senderID); }, 3000);
       }
       else {
@@ -340,7 +340,7 @@ function processWitRespone(senderID, results, user) {
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
       if(results.hasOwnProperty('intent')) {
         user.intent = results.intent[0].value;
-        if (user.intent === 'sell' || user.intent === 'post') {
+        if (user.intent.toString() === 'sell' || user.intent.toString() === 'post') {
           sendPostYourPropertyMessage(senderID);
           return;
         }
@@ -355,6 +355,16 @@ function processWitRespone(senderID, results, user) {
   } else if (user.hasOwnProperty('containsGreeting') && user.containsGreeting.toString() === 'false'){
       echoMessage(senderID, "Sorry, unable to identify your location. Please try again.");
       return;
+  } else {
+      if(results.hasOwnProperty('intent')) {
+        user.intent = results.intent[0].value;
+        if (user.intent.toString() === 'sell' || user.intent.toString() === 'post') {
+          sendPostYourPropertyMessage(senderID);
+          return;
+        }
+      } else {
+          echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
+      }
   }
 }
 
