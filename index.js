@@ -125,6 +125,7 @@ function receivedMessage(event) {
     }
 
     makeWitCall(messageText, senderID);
+    return;
 
   } else if (messageAttachments) {
     // echoMessage(senderID, "");
