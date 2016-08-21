@@ -192,13 +192,6 @@ function makeWitCall(messageText, senderID) {
               processWitRespone(senderID, results, user);
           } else {
               console.log('processing wit response..');
-              if (!user.hasOwnProperty('intent')) {
-                  userMap[senderID] = user;
-                  //  client.hmset(senderID, JSON.stringify(user));
-                  //  client.expire(senderID, 900);
-                  askIntent(senderID);
-                  return;
-              }
               processWitRespone(senderID, results, user);
           }
       }
@@ -286,6 +279,13 @@ function processWitRespone(senderID, results, user) {
   //  client.expire(senderID, 900);
 
   if(results.hasOwnProperty('location')) {
+    if (!user.hasOwnProperty('intent')) {
+      userMap[senderID] = user;
+      //  client.hmset(senderID, JSON.stringify(user));
+      //  client.expire(senderID, 900);
+      askIntent(senderID);
+      return;
+    }
     map['location'] = results.location[0].value;
     console.log('User Loc by text: ' + map['location']);
 
@@ -326,16 +326,25 @@ function processWitRespone(senderID, results, user) {
     });
 
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
+    if (!user.hasOwnProperty('intent')) {
+      userMap[senderID] = user;
+      //  client.hmset(senderID, JSON.stringify(user));
+      //  client.expire(senderID, 900);
+      askIntent(senderID);
+      return;
+    }
     searchNobroker(user, senderID);
   } else if (user.hasOwnProperty('containsGreeting')){
       if (user.containsGreeting.toString() === 'false') {
-        echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
+        // echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
+        echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
         return;
       } else if (user.containsGreeting.toString() === 'true'){
         return;
       }
   } else {
-      echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
+    echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
+    // echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
   }
 }
 
