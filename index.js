@@ -182,8 +182,23 @@ function makeWitCall(messageText, senderID) {
               console.log('processing wit response..');
               processWitRespone(senderID, results, user);
               // this.setTimeout(function() { echoMessage(senderID, 'Please type the location you are looking for rent/buy property: flats in powai mumbai');}, 2000);
+          } else if(results.hasOwnProperty('intent')) {
+              user.intent = results.intent[0].value;
+              if (user.intent.toString() === 'sell' || user.intent.toString() === 'post') {
+                userMap[senderID] = user;
+                sendPostYourPropertyMessage(senderID);
+                return;
+              }
+              processWitRespone(senderID, results, user);
           } else {
               console.log('processing wit response..');
+              if (!user.hasOwnProperty('intent')) {
+                  userMap[senderID] = user;
+                  //  client.hmset(senderID, JSON.stringify(user));
+                  //  client.expire(senderID, 900);
+                  askIntent(senderID);
+                  return;
+              }
               processWitRespone(senderID, results, user);
           }
       }
@@ -296,39 +311,12 @@ function processWitRespone(senderID, results, user) {
         var predictions = googleResponse.predictions;
 
         if (predictions && predictions.length > 0) {
-          console.log("Predictions Count: " + predictions.length);
           var place_id = predictions[0].place_id;
           console.log("Google PlaceId: " + place_id);
-          /*var existing_intent = user.intent;
-          userMap[senderID] = new User();
-          user = userMap[senderID];
-            client.hmset(senderID, JSON.stringify(new User()));
-              client.hgetall(senderID, function(err, object) {
-                user = JSON.parse(object) ;
-              });
-
-          if (existing_intent) {
-            user.intent = existing_intent;
-          }
-          console.log("Session reset for userId: " + senderID);*/
           user.location = place_id;
           userMap[senderID] = user;
           //  client.hmset(senderID, JSON.stringify(user));
           //  client.expire(senderID, 900);
-
-          if(results.hasOwnProperty('intent')) {
-            user.intent = results.intent[0].value;
-            if (user.intent === 'sell' || user.intent === 'post') {
-              sendPostYourPropertyMessage(senderID);
-              return;
-            }
-          } else if (!user.hasOwnProperty('intent')) {
-              userMap[senderID] = user;
-              //  client.hmset(senderID, JSON.stringify(user));
-              //  client.expire(senderID, 900);
-              askIntent(senderID);
-              return;
-          }
           searchNobroker(user, senderID);
         } else {
           echoMessage(senderID, "Sorry, Unable to identify your location. Please try again.");
@@ -338,19 +326,6 @@ function processWitRespone(senderID, results, user) {
     });
 
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
-      if(results.hasOwnProperty('intent')) {
-        user.intent = results.intent[0].value;
-        if (user.intent.toString() === 'sell' || user.intent.toString() === 'post') {
-          sendPostYourPropertyMessage(senderID);
-          return;
-        }
-      } else if (!user.hasOwnProperty('intent')) {
-          askIntent(senderID);
-          userMap[senderID] = user;
-          //  client.hmset(senderID, JSON.stringify(user));
-          //  client.expire(senderID, 900);
-          return;
-      }
     searchNobroker(user, senderID);
   } else if (user.hasOwnProperty('containsGreeting')){
       if (user.containsGreeting.toString() === 'false') {
@@ -360,15 +335,7 @@ function processWitRespone(senderID, results, user) {
         return;
       }
   } else {
-      if(results.hasOwnProperty('intent')) {
-        user.intent = results.intent[0].value;
-        if (user.intent.toString() === 'sell' || user.intent.toString() === 'post') {
-          sendPostYourPropertyMessage(senderID);
-          return;
-        }
-      } else {
-          echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
-      }
+      echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
   }
 }
 
