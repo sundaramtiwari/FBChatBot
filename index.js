@@ -88,7 +88,7 @@ function receivedMessage(event) {
   if (!userMap.hasOwnProperty(senderID)) {
     console.log('Adding new user to session: ' + senderID);
     userMap[senderID] = new User();
-    sendGenericMessage(senderID);
+    // sendGenericMessage(senderID);
     //this.setTimeout(function() { echoMessage(senderID, "Please type the location you are looking for rent/buy property: flats in powai mumbai"); }, 2000);
 
   } else {
