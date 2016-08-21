@@ -354,9 +354,9 @@ function processWitRespone(senderID, results, user) {
     searchNobroker(user, senderID);
   } else if (user.hasOwnProperty('containsGreeting')){
       if (user.containsGreeting.toString() === 'false') {
-        echoMessage(senderID, "Sorry, unable to identify your location. Please try again.");
+        echoMessage(senderID, "Oops! I Could not understand that. Try something like: 2 bhk flat for rent btm layout bangalore.");
         return;
-      } else {
+      } else if (user.containsGreeting.toString() === 'true'){
         return;
       }
   } else {
