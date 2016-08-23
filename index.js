@@ -112,6 +112,12 @@ function receivedMessage(event) {
       return;
     }*/
 
+    if (messageText.toLowerCase().indexOf("complain") > -1 || messageText.toLowerCase().indexOf("refund") > -1
+          || messageText.toLowerCase().indexOf("pathetic") > -1 || messageText.toLowerCase().indexOf("frod") > -1) {
+      echoMessage(senderID, "Thanks for contacting. One of our executives will get in touch with you shortly...");
+      return;
+    }
+
     if (messageText.toLowerCase().indexOf("plan") > -1) {
       sendPlansMessage(senderID);
       return;
