@@ -286,11 +286,12 @@ function processWitRespone(senderID, results, user) {
 
   if(results.hasOwnProperty('location')) {
     if (!user.hasOwnProperty('intent')) {
-      userMap[senderID] = user;
+      user.intent = 'rent';
+      // userMap[senderID] = user;
       //  client.hmset(senderID, JSON.stringify(user));
       //  client.expire(senderID, 900);
-      askIntent(senderID);
-      return;
+      // askIntent(senderID);
+      // return;
     }
     map['location'] = results.location[0].value;
     console.log('User Loc by text: ' + map['location']);
@@ -333,11 +334,12 @@ function processWitRespone(senderID, results, user) {
 
   } else if (user.hasOwnProperty('location') && user.isSearchReq.toString() === 'true') {
     if (!user.hasOwnProperty('intent')) {
-        userMap[senderID] = user;
+        user.intent = 'rent';
+        // userMap[senderID] = user;
         //  client.hmset(senderID, JSON.stringify(user));
         //  client.expire(senderID, 900);
-        askIntent(senderID);
-        return;
+        // askIntent(senderID);
+        // return;
     }
     searchNobroker(user, senderID);
   } else if (user.hasOwnProperty('containsGreeting')){
@@ -367,7 +369,7 @@ function  searchNobroker(user, senderID) {
   if (user.intent.toString().toLowerCase().indexOf("buy") > -1) {
     searchURL = 'http://www.nobroker.in/api/v1/property/sale/filter/region/';
   } else {
-      searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
+    searchURL = 'http://www.nobroker.in/api/v1/property/filter/region/';
   }
 
   searchURL = searchURL + user.location.trim();
