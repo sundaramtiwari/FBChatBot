@@ -1,0 +1,52 @@
+<!-- https://mvnrepository.com/artifact/commons-scxml/commons-scxml -->
+		<dependency>
+		    <groupId>commons-scxml</groupId>
+		    <artifactId>commons-scxml</artifactId>
+		    <version>0.9</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-logging</groupId>
+		    <artifactId>commons-logging</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-jexl</groupId>
+		    <artifactId>commons-jexl</artifactId>
+		    <version>1.1</version>
+		</dependency>
+		<dependency> 
+		    <groupId>xalan</groupId>
+		    <artifactId>xalan</artifactId>
+		    <version>2.7.1</version>
+		</dependency>
+		<!-- Ends here -->
+
+
+		@GET
+	@Path("/tests")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response testMethod1() {
+		Map<String, String> map = new HashMap<String, String>();
+		String email = "bmurtaza11@gmail.com";
+		String url = "https://www.zopim.com/api/v2/chats/search?q=visitor_email:" + email;
+		Response response = ClientBuilder.newClient().target(url)
+				.request(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Basic aGVsbG9Abm9icm9rZXIuaW46Tm9icm9rZXJTdXBwb3J0")
+				.get();
+		
+		JSONParser parser = new JSONParser();
+		JSONObject resp_json = null;
+		String chatId = null;
+		try {
+			resp_json = (JSONObject)parser.parse( response.readEntity(String.class) );
+			JSONArray results = (JSONArray) resp_json.get("results");
+			JSONObject result = (JSONObject) results.get(0);
+			chatId = (String) result.get("id");
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
